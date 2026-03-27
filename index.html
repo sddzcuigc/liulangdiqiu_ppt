@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>《流浪地球》视频演讲版</title>
+  <style>
+    :root {
+      --bg: #050608;
+      --fg: #f6efe3;
+      --muted: rgba(246, 239, 227, 0.76);
+      --line: rgba(255, 255, 255, 0.14);
+      --accent: #ff7d43;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Noto Serif SC", "Source Han Serif SC", "STZhongsong", "Microsoft YaHei", serif;
+    }
+    body {
+      background:
+        radial-gradient(circle at top, rgba(186, 63, 18, 0.18), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(42, 76, 145, 0.18), transparent 34%),
+        var(--bg);
+    }
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      isolation: isolate;
+    }
+    .bg-video, .bg-fallback {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bg-video {
+      z-index: -3;
+      filter: saturate(1.08) brightness(0.46) contrast(1.08);
+      background: #050608;
+    }
+
+    .bg-video.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .bg-fallback {
+      z-index: -4;
+      filter: saturate(1.04) brightness(0.54) contrast(1.02);
+      transform: scale(1.02);
+      transform-origin: center center;
+    }
+
+    .bg-fallback.animated {
+      animation: kenburns 18s ease-in-out infinite alternate;
+    }
+
+    .bg-fallback.portrait {
+      object-fit: contain;
+      object-position: right center;
+      transform: scale(0.74);
+      filter: saturate(1.02) brightness(0.72) contrast(1.02);
+      animation: portraitFloat 16s ease-in-out infinite alternate;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 55%);
+    }
+
+    .bg-fallback.tone-cold {
+      filter: saturate(0.92) brightness(0.52) contrast(1.05);
+    }
+
+    .bg-fallback.tone-warm {
+      filter: saturate(1.08) brightness(0.56) contrast(1.04);
+    }
+
+    .bg-fallback.tone-hope {
+      filter: saturate(1.06) brightness(0.58) contrast(1.02);
+    }
+    .veil {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(90deg, rgba(4, 5, 8, 0.72) 0%, rgba(4, 5, 8, 0.30) 38%, rgba(4, 5, 8, 0.66) 100%),
+        linear-gradient(180deg, rgba(4, 5, 8, 0.10), rgba(4, 5, 8, 0.58));
+    }
+
+    .veil.image-mode {
+      animation: veilPulse 14s ease-in-out infinite alternate;
+    }
+    .slides {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: end;
+      padding: 6vh 5vw 9vh;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 500ms ease, transform 650ms ease;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .copy {
+      position: relative;
+      z-index: 2;
+      max-width: min(62rem, 92vw);
+    }
+    .slide.cover {
+      align-items: center;
+      padding-top: 10vh;
+      padding-bottom: 14vh;
+    }
+    .slide.cover .copy {
+      max-width: min(48rem, 90vw);
+    }
+    .slide.cover h1 {
+      max-width: none;
+      margin: 1.4rem 0 1.4rem;
+      font-size: clamp(3.2rem, 6.4vw, 6.4rem);
+      letter-spacing: 0.08em;
+    }
+    .cover-meta {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 1.2rem;
+      background: rgba(8, 9, 12, 0.28);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    }
+    .cover-meta .school {
+      font-size: clamp(1.02rem, 1.5vw, 1.3rem);
+      color: rgba(255, 246, 235, 0.96);
+      letter-spacing: 0.04em;
+    }
+    .cover-meta .author {
+      font-size: clamp(1.34rem, 2.2vw, 1.8rem);
+      color: #ffd8bc;
+      letter-spacing: 0.14em;
+    }
+    .cover-meta .date {
+      font-size: 0.98rem;
+      color: rgba(255, 239, 223, 0.76);
+      letter-spacing: 0.08em;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.5rem 0.92rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(9, 10, 14, 0.44);
+      color: var(--muted);
+      backdrop-filter: blur(10px);
+      letter-spacing: 0.08em;
+      font-size: 0.92rem;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 0.56rem;
+      height: 0.56rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffcfaa, var(--accent));
+      box-shadow: 0 0 18px rgba(255, 125, 67, 0.6);
+    }
+    h1, h2 {
+      margin: 1.2rem 0 1rem;
+      line-height: 1.06;
+      letter-spacing: 0.05em;
+      text-wrap: balance;
+      text-shadow: 0 14px 42px rgba(0, 0, 0, 0.44);
+      max-width: 10ch;
+    }
+    h1 { font-size: clamp(3rem, 6vw, 6rem); }
+    h2 { font-size: clamp(2.15rem, 4.2vw, 4.5rem); }
+    .lead {
+      max-width: 28em;
+      margin: 0;
+      font-size: clamp(1rem, 1.28vw, 1.24rem);
+      line-height: 1.9;
+      color: rgba(255, 247, 236, 0.97);
+      white-space: pre-line;
+      text-shadow: 0 8px 28px rgba(0,0,0,.42);
+    }
+    .topbar, .bottombar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.2rem 1.4rem;
+      z-index: 5;
+    }
+    .topbar { top: 0; }
+    .bottombar { bottom: 0; }
+    .meta, .actions {
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .pill, .btn {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 9, 12, 0.44);
+      color: #fff4e8;
+      padding: 0.74rem 1rem;
+      font-size: 0.92rem;
+      backdrop-filter: blur(10px);
+    }
+    .btn { cursor: pointer; }
+    .volume-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 9, 12, 0.44);
+      color: #fff4e8;
+      padding: 0.58rem 0.9rem;
+      font-size: 0.9rem;
+      backdrop-filter: blur(10px);
+    }
+    .volume-wrap input[type="range"] {
+      width: 96px;
+      accent-color: #ff9b68;
+      cursor: pointer;
+    }
+
+    .mask-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 9, 12, 0.44);
+      color: #fff4e8;
+      padding: 0.58rem 0.9rem;
+      font-size: 0.9rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .mask-wrap input[type="range"] {
+      width: 96px;
+      accent-color: #ffd2a9;
+      cursor: pointer;
+    }
+    .status {
+      color: rgba(255, 244, 231, 0.76);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      max-width: 32rem;
+    }
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 4px;
+      z-index: 8;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #ff6336, #ffd2a9);
+      box-shadow: 0 0 24px rgba(255, 103, 61, 0.55);
+      transition: width 300ms ease;
+    }
+    .timer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 4px;
+      height: 3px;
+      z-index: 8;
+    }
+    .timer > span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: rgba(255, 236, 219, 0.88);
+      transition: width 120ms linear;
+    }
+    .timer-readout {
+      position: fixed;
+      right: 1.4rem;
+      bottom: 1.2rem;
+      z-index: 9;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 9, 12, 0.4);
+      color: rgba(255, 245, 233, 0.92);
+      padding: 0.68rem 0.95rem;
+      font-size: 0.9rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.2);
+      letter-spacing: 0.02em;
+    }
+    .timer-readout strong {
+      color: #ffd9bf;
+      font-weight: 600;
+    }
+
+    @keyframes kenburns {
+      0% {
+        transform: scale(1.02) translate3d(0%, 0%, 0);
+      }
+      35% {
+        transform: scale(1.07) translate3d(-1.2%, -0.6%, 0);
+      }
+      70% {
+        transform: scale(1.1) translate3d(1.4%, 0.8%, 0);
+      }
+      100% {
+        transform: scale(1.06) translate3d(-0.8%, 1%, 0);
+      }
+    }
+
+    @keyframes veilPulse {
+      0% {
+        opacity: 0.82;
+      }
+      50% {
+        opacity: 0.75;
+      }
+      100% {
+        opacity: 0.86;
+      }
+    }
+
+    @keyframes portraitFloat {
+      0% {
+        transform: scale(0.72) translate3d(1%, 0%, 0);
+      }
+      50% {
+        transform: scale(0.75) translate3d(0%, -1%, 0);
+      }
+      100% {
+        transform: scale(0.73) translate3d(-1%, 1%, 0);
+      }
+    }
+    @media (max-width: 980px) {
+      .slide { padding: 5rem 1.1rem 7rem; }
+      .bottombar { flex-direction: column; align-items: stretch; }
+      .lead { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <video class="bg-video" id="bgVideo" muted playsinline preload="auto" autoplay></video>
+    <img class="bg-fallback" id="bgFallback" src="./assets/images/01.jpg" alt="背景">
+    <div class="veil"></div>
+    <main class="slides" id="slides"></main>
+    <div class="topbar">
+      <div class="meta">
+        <span class="pill" id="counter">01 / 13</span>
+        <span class="pill">崔护制作</span>
+      </div>
+      <div class="actions">
+        <button class="btn" id="autoBtn" type="button">自动播放朗读</button>
+        <button class="btn" id="videoBtn" type="button">播放视频</button>
+        <button class="btn" id="musicBtn" type="button">播放音乐</button>
+        <label class="volume-wrap" for="volumeRange">
+          <span>音量</span>
+          <input id="volumeRange" type="range" min="0" max="100" value="72">
+        </label>
+        <label class="mask-wrap" for="maskRange">
+          <span>蒙版</span>
+          <input id="maskRange" type="range" min="35" max="100" value="100">
+        </label>
+        <button class="btn" id="fullscreenBtn" type="button">全屏</button>
+      </div>
+    </div>
+    <div class="bottombar">
+      <div class="status" id="status">待启动</div>
+      <div class="status" id="clipInfo">背景待加载</div>
+    </div>
+    <div class="progress"><span id="deckProgress"></span></div>
+    <div class="timer"><span id="clipProgress"></span></div>
+    <div class="timer-readout" id="timerDisplay"><strong>计时</strong><span>总时长 00:00 · 本页 00:00 / 00:00</span></div>
+    <audio id="bgm" loop preload="auto">
+      <source src="./assets/audio/bgm.mp3" type="audio/mpeg">
+      <source src="./assets/audio/bgm.aac" type="audio/aac">
+    </audio>
+  </div>
+
+  <script>
+    const supportedVideos = {
+      engine: "./assets/video/planet-engine-correct-front-55s-stable.mp4",
+      nearSun: "./assets/video/solar-aging-near-sun-612-717.mp4",
+      baseA: "./assets/video/bg.mp4",
+      flashA: "./assets/video/helium-flash-part-a.mp4",
+      flashB: "./assets/video/helium-flash-part-b.mp4",
+      ending5: "./assets/video/ending-recall-first5s.mp4"
+    };
+
+    const supportedImages = {
+      cover: "./assets/images/01.jpg",
+      redSky: "./assets/images/02.jpg",
+      sun: "./assets/images/03.jpg",
+      earthrise: "./assets/images/04.jpg",
+      journey: "./assets/images/05.jpg",
+      earthMoon: "./assets/images/06.jpg",
+      iceWorld: "./assets/images/07.jpg",
+      protestA: "./assets/images/08.jpg",
+      protestB: "./assets/images/09.jpg",
+      frozen: "./assets/images/10.jpg",
+      believe: "./assets/images/11.jpg",
+      flare: "./assets/images/12.jpg",
+      silence: "./assets/images/13.jpg",
+      light: "./assets/images/14.jpg",
+      diamond: "./assets/images/15.jpg"
+      ,liu: "./assets/images/wandering-earth-bookstore.jpg"
+    };
+
+    const deck = [
+      { pageLabel: "封面", title: "《流浪地球》读书分享", text: "宁津县第二实验小学 3年级6班\n崔护\n2026年4月", speechText: "我是宁津县第二实验小学 3年级6班 崔护，今天很高兴在这里分享我喜爱的一部科幻作品，刘慈欣的《流浪地球》。", image: supportedImages.cover, durationMs: 12000 },
+      { pageLabel: "开场", title: "近日点", text: "你知道吗？如果有一天，我们推开家门，看到的不是蓝天，而是暗红色的天空，太阳像一个烧红的大铁球，把地面烤得发烫。这就是《流浪地球》里，地球经过近日点时的情景。", video: supportedVideos.nearSun, ratio: 0, durationMs: 65000, image: supportedImages.cover },
+      { pageLabel: "设定", title: "一起上路", text: "经过超级 AI 的计算，人类发现太阳会很快老化，发生氦闪，最后变成一颗红巨星，把地球吞掉。面对这样的危险，人类做了一个很疯狂的决定：不坐飞船逃跑，而是给地球装上发动机，带着这个住了四十六亿年的家，一起上路。", video: supportedVideos.engine, ratio: 0.22, durationMs: 22000, image: supportedImages.redSky },
+      { pageLabel: "旅程", title: "两千五百年", text: "这场旅行要走两千五百年，整整一百代人。按照《流浪地球》的设定，人类要经历五个阶段，才能带着地球离开太阳系，飞向新的家园。", video: supportedVideos.ending5, ratio: 0, image: supportedImages.journey, durationMs: 14000 },
+      { pageLabel: "概括", title: "硬核又温暖", text: "刘慈欣的《流浪地球》，写的不只是宇宙里的大胆想象和重聚变发动机这样的科学设定，更是一个在灾难面前，依然让人感到温暖和希望的故事。", image: supportedImages.earthMoon, durationMs: 18000 },
+      { pageLabel: "转折", title: "真正震撼的", text: "故事里最让我震撼的，不只是那些高耸入云的行星发动机，也不只是被冻成冰原的上海，更是当全世界都开始怀疑“流浪地球”是不是一个骗局的时候，依然有一群人选择了坚守。", video: supportedVideos.baseA, ratio: 0.36, durationMs: 26000, image: supportedImages.believe },
+      { pageLabel: "冲突", title: "怀疑与反叛", text: "那时候，地球已经飞了好几百年，可太阳看起来却没什么变化。越来越多的人开始愤怒：“我们是不是被骗了？”他们组成反叛军，攻进地球驾驶室，想让地球掉头，再飞回太阳身边；又把五千名坚持计划的科学家赶到冰天雪地的地表，摘掉他们的头盔，让他们在零下一百度的严寒里，慢慢冻成冰雕。\n\n那些科学家没有求饶。他们就那样手挽着手站在一起，看着疯狂庆祝的人群，像是在等一个答案。", video: supportedVideos.flashA, ratio: 0, image: supportedImages.protestB, durationMs: 48000 },
+      { pageLabel: "高潮", title: "就在此时", text: "就在此时，太阳氦闪爆发了。\n\n那一刻，先前所有的怀疑、愤怒和喧闹，好像一下子都停住了。人们终于明白，那些被冻死的人，才是真正坚持到最后的清醒者。他们明明知道自己会被当成骗子处死，却依然选择坚守；他们明明也可以逃跑，却选择用生命坚守人类的理性。\n\n你可能会问：他们为什么没有背叛自己原来的信仰？", video: supportedVideos.flashB, ratio: 0, durationMs: 50000, image: supportedImages.flare },
+      { pageLabel: "回答", title: "比生命更珍贵", text: "我想，也许正因为他们比谁都清楚，一旦放弃理性，人类失去的就不只是一次判断，更是继续走下去的方向。\n\n所以，他们守到最后的，不只是计划本身，更是人类在灾难面前依然愿意相信未来的那一点希望。", image: supportedImages.light, durationMs: 22000 },
+      { pageLabel: "主题", title: "高贵的人", text: "书里有一句话，我特别喜欢：“我们必须抱有希望，这并不是因为希望真的存在，而是因为我们要做高贵的人。”\n\n什么叫高贵的人？不是穿得多好，住得多好，而是当别人误解你、嘲笑你，甚至讨厌你的时候，你依然愿意为他们点亮一束光。", image: supportedImages.light, durationMs: 34000 },
+      { pageLabel: "比喻", title: "希望像钻石", text: "希望像什么？我觉得像钻石。\n\n钻石为什么珍贵？不是因为它永远不会碎，而是就算碎了，每一块碎片也还在发光。\n\n希望也是这样。那些科学家虽然被冻成了冰雕，但他们坚守的希望并没有熄灭，而是像光一样，慢慢照进了后来人的心里。", image: supportedImages.diamond, durationMs: 36000 },
+      { pageLabel: "收束", title: "最大的感受", text: "所以，如果你问我，读完《流浪地球》最大的感受是什么，我会说：\n\n不是害怕，不是悲伤，而是感动。", image: supportedImages.earthrise, durationMs: 17000 },
+      { pageLabel: "结尾", title: "我选择希望", text: "我感动的是，在那颗流浪的星球上，有一群人，在宇宙最黑暗的角落里，依然选择相信明天。\n\n今天的世界变化很快，也有很多让人迷茫的事情。可是《流浪地球》让我明白：无论未来会走向哪里，我们都可以选择希望。\n\n所以今天，我也想把这句话送给自己：无论人类未来走向何处，我选择希望。", image: supportedImages.earthrise, durationMs: 42000 },
+      { pageLabel: "致谢", title: "感谢刘慈欣", text: "感谢刘慈欣，为我们带来这样一部辽阔、冷峻，却始终指向希望的作品。\n\n本 PPT 素材来源于哔哩哔哩，由本人使用 Codex 制作。\n提示词链接：github.com/sddzcuigc/liulangdiqiu_ppt_prompt_codex", image: supportedImages.liu, durationMs: 18000 }
+    ];
+
+    const slidesRoot = document.getElementById("slides");
+    const bgVideo = document.getElementById("bgVideo");
+    const bgFallback = document.getElementById("bgFallback");
+    const veil = document.querySelector(".veil");
+    const counter = document.getElementById("counter");
+    const deckProgress = document.getElementById("deckProgress");
+    const clipProgress = document.getElementById("clipProgress");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const status = document.getElementById("status");
+    const clipInfo = document.getElementById("clipInfo");
+    const autoBtn = document.getElementById("autoBtn");
+    const videoBtn = document.getElementById("videoBtn");
+    const musicBtn = document.getElementById("musicBtn");
+    const volumeRange = document.getElementById("volumeRange");
+    const maskRange = document.getElementById("maskRange");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const bgm = document.getElementById("bgm");
+
+    let currentIndex = 0;
+    let autoPlaying = false;
+    let speechEnabled = false;
+    let slideTimer = null;
+    let progressTimer = null;
+    let timerReadoutTimer = null;
+    let segmentStart = 0;
+    let segmentEnd = 0;
+    let selectedVoice = null;
+    let activeUtterance = null;
+    let speechToken = 0;
+    let wheelLocked = false;
+    let pageDurationMs = deck.map(item => estimateDuration(item.text));
+    let presentationStartedAt = null;
+    let currentPageStartedAt = performance.now();
+    let currentPageTargetMs = pageDurationMs[0];
+
+    slidesRoot.innerHTML = deck.map((item, idx) => `
+      <section class="slide ${idx === 0 ? "active cover" : ""}">
+        <div class="copy">
+          <span class="eyebrow">${item.pageLabel} · 第 ${idx + 1} 页</span>
+          <h${idx === 0 ? "1" : "2"}>${item.title}</h${idx === 0 ? "1" : "2"}>
+          ${
+            idx === 0
+              ? (() => {
+                  const parts = item.text.split("\\n");
+                  return `<div class="cover-meta"><span class="school">${parts[0] || ""}</span><span class="author">${parts[1] || ""}</span><span class="date">${parts[2] || ""}</span></div>`;
+                })()
+              : `<p class="lead">${item.text}</p>`
+          }
+        </div>
+      </section>
+    `).join("");
+
+    const slides = [...document.querySelectorAll(".slide")];
+
+    function resolveVoices() {
+      if (!window.speechSynthesis) return;
+      const voices = window.speechSynthesis.getVoices();
+      selectedVoice =
+        voices.find((voice) => /xiaoxiao|晓晓/i.test(voice.name)) ||
+        voices.find((voice) => /zh[-_]?cn|chinese|中文/i.test(`${voice.lang} ${voice.name}`)) ||
+        null;
+    }
+
+    function updateShell() {
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === currentIndex));
+      counter.textContent = `${String(currentIndex + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
+      deckProgress.style.width = `${((currentIndex + 1) / deck.length) * 100}%`;
+      document.title = `《流浪地球》视频演讲版 - ${currentIndex + 1}/${deck.length}`;
+    }
+
+    function stopSpeech() {
+      speechToken += 1;
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+    }
+
+    function estimateDuration(text) {
+      const clean = (text || "").replace(/\s+/g, "");
+      const chars = clean.length;
+      const ms = 2500 + chars * 340;
+      return Math.max(7000, Math.min(ms, 52000));
+    }
+
+    function formatTime(ms) {
+      const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function updateTimerReadout() {
+      if (!timerDisplay) return;
+      const now = performance.now();
+      const totalElapsed = presentationStartedAt ? now - presentationStartedAt : 0;
+      const pageElapsed = now - currentPageStartedAt;
+      timerDisplay.innerHTML = `<strong>计时</strong><span>总时长 ${formatTime(totalElapsed)} · 本页 ${formatTime(pageElapsed)} / ${formatTime(currentPageTargetMs)}</span>`;
+    }
+
+    function ensureTimerReadout() {
+      if (!presentationStartedAt) presentationStartedAt = performance.now();
+      updateTimerReadout();
+      clearInterval(timerReadoutTimer);
+      timerReadoutTimer = setInterval(updateTimerReadout, 250);
+    }
+
+    function speakCurrent() {
+      if (!speechEnabled || !window.speechSynthesis) return false;
+      stopSpeech();
+      const token = speechToken;
+      const utterance = new SpeechSynthesisUtterance(deck[currentIndex].speechText || deck[currentIndex].text);
+      activeUtterance = utterance;
+      utterance.lang = selectedVoice?.lang || "zh-CN";
+      utterance.voice = selectedVoice || null;
+      utterance.rate = 0.96;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      utterance.onstart = () => {
+        if (token !== speechToken) return;
+        status.textContent = "朗读中";
+      };
+      utterance.onerror = () => {
+        if (token !== speechToken) return;
+        activeUtterance = null;
+        status.textContent = "朗读失败";
+        if (autoPlaying) scheduleNext(pageDurationMs[currentIndex]);
+      };
+      utterance.onend = () => {
+        if (token !== speechToken) return;
+        activeUtterance = null;
+        status.textContent = "朗读完成";
+        if (!autoPlaying) return;
+        if (currentIndex >= deck.length - 1) {
+          stopAutoPlay("播放完成", { stopMedia: true });
+          return;
+        }
+        scheduleNext(1200);
+      };
+      window.speechSynthesis.speak(utterance);
+      return true;
+    }
+
+    function clearTimers() {
+      clearTimeout(slideTimer);
+      clearInterval(progressTimer);
+      clearInterval(timerReadoutTimer);
+    }
+
+    function startClipProgress(durationMs) {
+      currentPageStartedAt = performance.now();
+      currentPageTargetMs = durationMs;
+      ensureTimerReadout();
+      clearInterval(progressTimer);
+      const startedAt = currentPageStartedAt;
+      clipProgress.style.width = "0%";
+      progressTimer = setInterval(() => {
+        const elapsed = performance.now() - startedAt;
+        const ratio = Math.min(1, elapsed / durationMs);
+        clipProgress.style.width = `${ratio * 100}%`;
+        if (ratio >= 1) clearInterval(progressTimer);
+      }, 100);
+    }
+
+    function playVideo() {
+      return bgVideo.play().then(() => {
+        videoBtn.textContent = "暂停视频";
+      }).catch(() => {
+        clipInfo.textContent = "图片显示中";
+      });
+    }
+
+    function showImage(item) {
+      bgFallback.src = item.image || supportedImages.cover;
+      bgFallback.classList.add("animated");
+      bgFallback.classList.remove("tone-cold", "tone-warm", "tone-hope", "portrait");
+      veil.classList.add("image-mode");
+      const label = `${item.pageLabel} ${item.title}`;
+      if (/致谢|刘慈欣/.test(label)) {
+        bgFallback.classList.add("portrait");
+      } else if (/高潮|太阳|开场|设定/.test(label)) {
+        bgFallback.classList.add("tone-warm");
+      } else if (/希望|高贵|结尾|感受|比生命|钻石/.test(label)) {
+        bgFallback.classList.add("tone-hope");
+      } else {
+        bgFallback.classList.add("tone-cold");
+      }
+      bgVideo.pause();
+      bgVideo.removeAttribute("src");
+      bgVideo.load();
+      bgVideo.classList.add("hidden");
+      clipInfo.textContent = "图片显示中";
+      videoBtn.textContent = "播放视频";
+      videoBtn.disabled = true;
+      videoBtn.style.opacity = "0.5";
+    }
+
+    function loadVideo(item) {
+      bgFallback.src = item.image || supportedImages.cover;
+      bgFallback.classList.remove("animated", "tone-cold", "tone-warm", "tone-hope", "portrait");
+      veil.classList.remove("image-mode");
+      bgVideo.classList.remove("hidden");
+      clipInfo.textContent = "视频加载中";
+      videoBtn.disabled = false;
+      videoBtn.style.opacity = "1";
+
+      bgVideo.onerror = () => {
+        showImage(item);
+      };
+
+      bgVideo.onloadedmetadata = () => {
+        const duration = bgVideo.duration;
+        if (!duration || !Number.isFinite(duration)) {
+          showImage(item);
+          return;
+        }
+        segmentStart = Math.max(0, Math.min(duration - 0.3, duration * (item.ratio || 0)));
+        segmentEnd = Math.min(duration, segmentStart + Math.max(6, item.durationMs / 1000));
+        if (segmentEnd - segmentStart < 3) {
+          segmentStart = 0;
+          segmentEnd = Math.min(duration, Math.max(6, item.durationMs / 1000));
+        }
+        bgVideo.currentTime = segmentStart;
+        bgVideo.ontimeupdate = () => {
+          if (bgVideo.currentTime >= segmentEnd - 0.08) bgVideo.currentTime = segmentStart;
+        };
+        clipInfo.textContent = "视频播放中";
+        playVideo();
+      };
+
+      bgVideo.src = item.video;
+      bgVideo.load();
+    }
+
+    function loadCurrentBackground() {
+      const item = deck[currentIndex];
+      if (item.video) {
+        loadVideo(item);
+      } else {
+        showImage(item);
+      }
+    }
+
+    function stopAutoPlay(text = "待启动", options = {}) {
+      const { stopMedia = false } = options;
+      autoPlaying = false;
+      speechEnabled = false;
+      clearTimeout(slideTimer);
+      clearInterval(progressTimer);
+      stopSpeech();
+      activeUtterance = null;
+      if (stopMedia) {
+        bgVideo.pause();
+        bgm.pause();
+        videoBtn.textContent = "播放视频";
+        musicBtn.textContent = "播放音乐";
+      }
+      autoBtn.textContent = "自动播放朗读";
+      status.textContent = text;
+      updateTimerReadout();
+    }
+
+    function scheduleNext(delayMs) {
+      clearTimeout(slideTimer);
+      slideTimer = setTimeout(() => {
+        if (!autoPlaying) return;
+        if (currentIndex >= deck.length - 1) {
+          stopAutoPlay("播放完成", { stopMedia: true });
+          return;
+        }
+        currentIndex += 1;
+        updateShell();
+        loadCurrentBackground();
+        startClipProgress(pageDurationMs[currentIndex]);
+        const speakingStarted = speakCurrent();
+        if (!speakingStarted) {
+          scheduleNext(pageDurationMs[currentIndex]);
+        }
+      }, delayMs);
+    }
+
+    function startAutoPlay() {
+      autoPlaying = true;
+      speechEnabled = true;
+      autoBtn.textContent = "停止自动播放";
+      bgm.volume = Number(volumeRange.value) / 100;
+      bgm.play().then(() => {
+        musicBtn.textContent = "暂停音乐";
+      }).catch(() => {});
+      loadCurrentBackground();
+      startClipProgress(pageDurationMs[currentIndex]);
+      const speakingStarted = speakCurrent();
+      if (!speakingStarted) {
+        scheduleNext(pageDurationMs[currentIndex]);
+      }
+    }
+
+    function goTo(nextIndex) {
+      if (autoPlaying) stopAutoPlay("待启动");
+      currentIndex = Math.max(0, Math.min(deck.length - 1, nextIndex));
+      updateShell();
+      loadCurrentBackground();
+      startClipProgress(pageDurationMs[currentIndex]);
+    }
+
+    autoBtn.addEventListener("click", () => {
+      if (autoPlaying) stopAutoPlay("待启动");
+      else startAutoPlay();
+    });
+
+    videoBtn.addEventListener("click", () => {
+      if (videoBtn.disabled) return;
+      if (bgVideo.paused) playVideo();
+      else {
+        bgVideo.pause();
+        videoBtn.textContent = "播放视频";
+      }
+    });
+
+    musicBtn.addEventListener("click", () => {
+      if (bgm.paused) {
+        bgm.volume = Number(volumeRange.value) / 100;
+        bgm.play().then(() => { musicBtn.textContent = "暂停音乐"; }).catch(() => {});
+      } else {
+        bgm.pause();
+        musicBtn.textContent = "播放音乐";
+      }
+    });
+
+    volumeRange.addEventListener("input", () => {
+      bgm.volume = Number(volumeRange.value) / 100;
+    });
+
+    function applyMaskBrightness() {
+      const opacity = Number(maskRange.value) / 100;
+      veil.style.opacity = String(opacity);
+    }
+
+    maskRange.addEventListener("input", applyMaskBrightness);
+
+    fullscreenBtn.addEventListener("click", async () => {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        fullscreenBtn.textContent = "退出全屏";
+      } else {
+        await document.exitFullscreen();
+        fullscreenBtn.textContent = "全屏";
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        goTo(currentIndex + 1);
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        event.preventDefault();
+        goTo(currentIndex - 1);
+      }
+    }, { passive: false });
+
+    document.addEventListener("wheel", (event) => {
+      if (wheelLocked) return;
+      if (Math.abs(event.deltaY) < 18) return;
+      wheelLocked = true;
+      setTimeout(() => {
+        wheelLocked = false;
+      }, 550);
+      if (event.deltaY > 0) {
+        goTo(currentIndex + 1);
+      } else {
+        goTo(currentIndex - 1);
+      }
+    }, { passive: true });
+
+    document.addEventListener("click", () => {
+      if (!videoBtn.disabled) playVideo();
+    }, { once: true });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (
+        target.closest(".btn") ||
+        target.closest(".volume-wrap") ||
+        target.closest("input") ||
+        target.closest(".topbar")
+      ) {
+        return;
+      }
+      if (event.clientX > window.innerWidth * 0.55) {
+        goTo(currentIndex + 1);
+      } else if (event.clientX < window.innerWidth * 0.45) {
+        goTo(currentIndex - 1);
+      }
+    });
+
+    if (window.speechSynthesis) {
+      resolveVoices();
+      window.speechSynthesis.addEventListener?.("voiceschanged", resolveVoices);
+      window.addEventListener("beforeunload", stopSpeech);
+    }
+
+    updateShell();
+    loadCurrentBackground();
+    startClipProgress(pageDurationMs[0]);
+    applyMaskBrightness();
+  </script>
+</body>
+</html>
