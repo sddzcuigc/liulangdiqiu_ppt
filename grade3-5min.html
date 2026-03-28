@@ -407,7 +407,6 @@
     <div class="timer"><span id="clipProgress"></span></div>
     <div class="timer-readout" id="timerDisplay"><strong>计时</strong><span>总时长 00:00 · 本页 00:00 / 00:00</span></div>
     <audio id="bgm" loop preload="auto">
-      <source src="./assets/audio/bgm.mp3" type="audio/mpeg">
       <source src="./assets/audio/bgm.aac" type="audio/aac">
     </audio>
   </div>
@@ -443,20 +442,16 @@
     };
 
     const deck = [
-      { pageLabel: "封面", title: "《流浪地球》读书分享", text: "宁津县第二实验小学 3年级6班\n崔护\n2026年4月", speechText: "大家好，我是宁津县第二实验小学三年级六班的崔护。今天，我想和大家分享一部让我读完以后久久不能平静的作品，那就是刘慈欣的《流浪地球》。", video: supportedVideos.coverIntro, ratio: 0, image: supportedImages.cover, durationMs: 14000 },
-      { pageLabel: "开场", title: "开场", text: "大家好，我是宁津县第二实验小学三年级六班的崔护。今天，我想和大家分享一部让我读完以后久久不能平静的作品，那就是刘慈欣的《流浪地球》。\n\n这本书的开头，只有一句话：\n\n“我没见过黑夜，我没见过星星，我没见过春天、秋天和冬天。”\n\n说这句话的人，出生在地球刚刚停止自转的那一刻。从那天起，她再也没有见过真正的蓝天、白云和星空。\n\n这样的生活，不是几个月，不是几年，而是一代人、两代人，甚至一百代人的命运。", speechText: "这本书的开头，只有一句话：‘我没见过黑夜，我没见过星星，我没见过春天、秋天和冬天。’说这句话的人，出生在地球刚刚停止自转的那一刻。从那天起，她再也没有见过真正的蓝天、白云和星空。这样的生活，不是几个月，不是几年，而是一代人、两代人，甚至一百代人的命运。", video: supportedVideos.nearSun, ratio: 0, image: supportedImages.cover, durationMs: 36000 },
-      { pageLabel: "起因", title: "为什么要离开", text: "故事要从太阳说起。\n\n科学家发现，太阳正在老化。它内部的氢已经快烧完了，未来将发生氦闪，并膨胀成一颗红巨星。到了那时，地球将不再适合人类生存。\n\n人类只剩下大约四百年时间。\n\n怎么逃？当时有两种声音：一种主张造飞船离开，叫‘飞船派’；另一种主张带着地球一起走，叫‘地球派’。\n\n为什么一定要带着地球？\n\n书里有一句话，我印象特别深：\n\n‘人类在宇宙间离开了地球，就像婴儿在沙漠里离开了母亲。’\n\n于是，人类作出了一个无比艰难却又坚定的决定：给地球装上发动机，带着我们的家园，一起上路。", video: supportedVideos.engine, ratio: 0.22, image: supportedImages.redSky, durationMs: 42000 },
-      { pageLabel: "旅程", title: "两千五百年的旅程", text: "为了带着地球离开太阳系，人类在地球上建造了一万两千台行星发动机。最大的发动机有一万一千米高，比珠穆朗玛峰还高出两千米。\n\n按照原著设定，整个计划要经历五个阶段。\n\n第一步，刹车时代，让地球停止自转，用了四十二年。\n第二步，逃逸时代，让地球飞出太阳系。\n第三步，流浪时代Ⅰ，在外太空继续加速。\n第四步，流浪时代Ⅱ，掉转方向，开始减速。\n第五步，新太阳时代，把地球泊入比邻星轨道，找到新的家园。\n\n这场旅程要走多久？\n\n两千五百年。整整一百代人。\n\n今天出发的人，看不到终点。可人类还是决定：一代接着一代，把地球继续往前推。", video: supportedVideos.ending5, ratio: 0, playbackRate: 0.8, image: supportedImages.journey, durationMs: 42000 },
-      { pageLabel: "世界", title: "地下城", text: "地球停转以后，世界完全变了。\n\n大海被冻结成冰原，城市被冰雪吞没，人类只能住进地下城。曾经熟悉的蓝天、阳光、四季，都变成了遥远的回忆。\n\n学校里主要教理工科，艺术和哲学被压缩到最少，因为人类已经没有太多空闲去想别的事情了。人们最关心的，只有太阳的状态和地球的位置。\n\n书里还有一个让我印象很深的细节。\n\n有一堂哲学课，老师出了一个谜语：\n\n‘你在平原上走着走着，突然迎面遇到一堵墙。这墙向上无限高，向下无限深，向左无限远，向右无限远。这墙是什么？’\n\n最后，一个学生说出了谜底：\n\n‘死亡。’\n\n在那个时代，死亡不再遥远，它像影子一样，时时刻刻跟在人类身边。", image: supportedImages.earthMoon, durationMs: 42000 },
-      { pageLabel: "转折", title: "怀疑的种子", text: "地球已经流浪了好几百年。\n\n可是，太阳看起来还是老样子。它没有爆炸，也没有膨胀，好像什么都没有发生。\n\n于是，越来越多的人开始愤怒：\n\n‘我们是不是被骗了？’\n\n他们开始怀疑：太阳真的会毁灭地球吗？‘流浪地球’计划，会不会从头到尾就是一个巨大的骗局？\n\n怀疑一旦开始，就会越长越大。\n\n而比寒冷更可怕的，往往就是这种动摇。", image: supportedImages.believe, durationMs: 30000 },
-      { pageLabel: "冲突", title: "反叛", text: "终于，反叛军站了出来。\n\n他们的首领对着愤怒的人群高喊：\n\n‘公民们！地球被出卖了！人类被出卖了！文明被出卖了！我们都是一个超级骗局的牺牲品！’\n\n‘太阳还是原来的太阳，它不会爆发！过去不会，现在不会，将来也不会！’\n\n这些话一下子点燃了人群。\n\n成千上万的人加入反叛军，一路攻进地球驾驶室，抓住了坚持‘流浪地球’计划的五千多名科学家和联合政府成员。\n\n这一刻，人类面对的不只是宇宙灾难，还有自己内部的崩塌。", video: supportedVideos.baseA, ratio: 0.36, image: supportedImages.believe, durationMs: 34000 },
-      { pageLabel: "冲突", title: "处刑", text: "反叛军把这五千多人押到了冰封的海面上。\n\n那里是零下一百度的严寒。\n\n他们执行死刑的方式很残酷：收走每个人密封服上加热用的核能电池。失去热量以后，防护服就会慢慢变成一座冰棺。\n\n岸上挤满了十几万人。有人朝他们吐唾沫，有人用冰块和石头砸他们。有人面罩被砸裂了，脸被冻得麻木，却还是努力向前走。\n\n岸上的人甚至唱起了《我的太阳》。\n\n那一幕，不只是残酷，更让人心里发冷。\n\n因为最可怕的，不是寒冷，而是人群以为自己站在正义的一边。", video: supportedVideos.flashA, ratio: 0, image: supportedImages.protestB, durationMs: 42000 },
-      { pageLabel: "坚守", title: "遗言", text: "五千人站在冰原上，手挽着手，面对着疯狂的人群。\n\n他们中有人说出了最后一段话：\n\n‘我们理解所有的人，因为已经进行了四十代人、还要延续一百代人的艰难奋斗中，永远保持理智确实是一个奢求。’\n\n‘但也请所有的人记住我们，站在这里的这五千多人，是我们把信念坚持到了最后。’\n\n‘我们都知道自己看不到真理被证实的那一天，但如果人类得以延续万代，以后所有的人将在我们的墓前洒下自己的眼泪。这颗叫地球的行星，就是我们永恒的纪念碑！’\n\n说完，他们静静地站在冰原上。\n\n一个小时以后，他们还站着，可已经没有一个活人了。\n\n他们的身体被冻住了，但他们的信念没有倒下。", image: supportedImages.protestB, durationMs: 44000 },
-      { pageLabel: "高潮", title: "太阳氦闪", text: "岸上的人还在庆祝。\n\n他们以为自己胜利了，以为正义终于战胜了谎言。\n\n就在此时，\n\n太阳氦闪爆发了。\n\n太阳的位置上，出现了一个暗红色的巨大球体。它慢慢膨胀，水星、金星、火星，都在极高的温度中化成了轻烟。\n\n《我的太阳》的合唱一下子停住了。\n\n岸上的十几万人全都呆住了。\n\n他们终于明白：那些被冻死的人，才是真正清醒的人。\n\n他们明明知道自己会被当成骗子处死，却依然选择坚守。\n他们明明可以逃跑，却用生命守住了人类的未来。", video: supportedVideos.flashB, ratio: 0, image: supportedImages.flare, durationMs: 36000 },
-      { pageLabel: "主题", title: "高贵的定义", text: "书里有一句话，我特别喜欢：\n\n‘我们必须抱有希望，这并不是因为希望真的存在，而是因为我们要做高贵的人。’\n\n什么叫高贵的人？\n\n在以前，也许有人觉得，高贵和财富、权力、地位有关。\n可是在《流浪地球》里，高贵不是这些东西。\n\n高贵，是当所有人都误解你、嘲笑你、甚至恨你的时候，你依然不放弃自己的判断；\n高贵，是明明知道结果很残酷，你还是愿意为更多人守住未来。\n\n那些被冻死的科学家，就是这样高贵的人。", image: supportedImages.light, durationMs: 36000 },
-      { pageLabel: "主题", title: "两种希望", text: "《流浪地球》让我明白，希望也有两种。\n\n反叛军也说自己有希望。他们说：‘回到太阳身边就安全了。’\n但那其实不是真正的希望，而是一种假的安慰。它让人放弃思考，放弃努力，最后像毒药一样麻痹人。\n\n真正的希望，不是闭着眼睛说‘一切都会好起来’。\n\n真正的希望，是明明知道前方可能是绝路，依然选择走下去；\n是明明知道会被误解、会付出代价，依然选择坚守。\n\n没有现实支撑的希望是毒药。\n而敢于直面绝望的希望，才是文明的火种。", image: supportedImages.diamond, durationMs: 36000 },
-      { pageLabel: "感受", title: "我的感受", text: "所以，如果你问我，读完《流浪地球》最大的感受是什么，\n\n我会说：\n\n不是害怕，不是悲伤，而是感动，更是敬佩。\n\n我感动的是，在那颗流浪的星球上，有一群人，即使面对误解、死亡和绝望，也依然没有放弃自己的判断，没有背叛自己的信念。\n\n正如书里那句话：\n\n‘让人类永远保持理智，确实是一种奢求。’\n\n但也正因为这样，那些在最黑暗的时候仍然坚持理性、坚持信念的人，才显得更加伟大。", image: supportedImages.earthrise, durationMs: 30000 },
-      { pageLabel: "结尾", title: "结尾", text: "今天的世界变化很快，也有很多让人迷茫的事情。可是《流浪地球》让我明白：\n\n无论未来走向哪里，我们都要守住内心的理性，坚守自己的信念，也不要放弃真正的希望。\n\n电影《流浪地球》里，有一句让我特别震撼的话：\n\n‘无论最终结果将人类历史导向何处，我们决定，选择希望。’\n\n我想，真正的希望，不是闭着眼睛安慰自己，而是在看见困难、误解，甚至绝望以后，依然愿意向前走。\n\n我相信，只要人类还愿意坚守理性、坚守信念、选择希望，那么总有一天，我们会再次看到蓝天，也会看到鲜花重新挂满枝头。\n\n我的分享就到这里，谢谢大家！", image: supportedImages.earthrise, durationMs: 42000 }
+      { pageLabel: "封面", title: "《流浪地球》读书分享", text: "宁津县第二实验小学 3年级6班\n崔护\n2026年4月", speechText: "大家好，我是宁津县第二实验小学三年级六班的崔护。今天，我想和大家分享一部让我读完以后久久不能平静的作品，那就是刘慈欣的《流浪地球》。", video: supportedVideos.coverIntro, ratio: 0, image: supportedImages.cover, durationMs: 12000 },
+      { pageLabel: "开场", title: "开场", text: "《流浪地球》一开头，就写下了一句让我一下子安静下来的话：\n\n‘我没见过黑夜，我没见过星星，我没见过春天、秋天和冬天。’\n\n说这句话的人，出生在地球刚刚停止自转的那一刻。从那以后，蓝天、白云和星空，都成了遥远的回忆。\n\n读到这里，我就知道，这本书写的不是一场普通冒险，而是整个人类的命运。", video: supportedVideos.nearSun, ratio: 0, image: supportedImages.cover, durationMs: 26000 },
+      { pageLabel: "起因", title: "为什么要离开", text: "科学家发现，太阳正在老化，未来将发生氦闪，并膨胀成红巨星。到了那时，地球将不再适合人类生存。\n\n人类只剩下大约四百年时间。怎么逃？有人主张坐飞船离开，有人主张带着地球一起走。\n\n书里说：‘人类在宇宙间离开了地球，就像婴儿在沙漠里离开了母亲。’\n\n于是，人类决定给地球装上发动机，带着家园一起上路。", video: supportedVideos.engine, ratio: 0.22, image: supportedImages.redSky, durationMs: 30000 },
+      { pageLabel: "旅程", title: "两千五百年的旅程", text: "为了带着地球离开太阳系，人类建造了一万两千台行星发动机，最大的比珠穆朗玛峰还高。\n\n按照原著设定，这场远征要经历五个阶段：刹车时代、逃逸时代、流浪时代Ⅰ、流浪时代Ⅱ和新太阳时代。\n\n这场旅程要持续两千五百年，跨越整整一百代人。今天出发的人，看不到终点，可人类还是决定一代接着一代，把地球继续往前推。", video: supportedVideos.ending5, ratio: 0, playbackRate: 0.8, image: supportedImages.journey, durationMs: 30000 },
+      { pageLabel: "世界", title: "地下城", text: "地球停转以后，世界彻底变了。大海被冻结成冰原，城市被冰雪吞没，人类只能住进地下城。\n\n曾经熟悉的蓝天、阳光和四季，都成了遥远的回忆。\n\n书里有一个细节让我很难忘：老师问，前方有一堵向四面八方无限延伸的墙，那是什么？最后学生说出了答案：‘死亡。’\n\n在那个时代，死亡像影子一样，时时刻刻跟在人类身边。", image: supportedImages.earthMoon, durationMs: 26000 },
+      { pageLabel: "转折", title: "怀疑与反叛", text: "可比寒冷更可怕的，是怀疑。地球已经流浪了好几百年，太阳看起来却还是老样子。\n\n于是越来越多的人开始愤怒：‘我们是不是被骗了？’\n\n反叛军站了出来，高喊‘流浪地球’是一个超级骗局。成千上万的人被点燃，冲进地球驾驶室，抓住了坚持计划的科学家和联合政府成员。\n\n人类面对的，不只是宇宙灾难，还有自己内部的崩塌。", video: supportedVideos.baseA, ratio: 0.36, image: supportedImages.believe, durationMs: 32000 },
+      { pageLabel: "坚守", title: "冰原上的坚守", text: "反叛军把五千多人押到冰封的海面上，在零下一百度的严寒里慢慢处死。\n\n岸上挤满了欢呼和咒骂的人群，可那些科学家和政府成员没有求饶，也没有退缩。他们手挽着手，站在冰原上，把信念坚持到最后。\n\n有人说：‘让人类永远保持理智，确实是一种奢求。’\n\n可即使这样，他们还是愿意用自己的生命，守住人类最后的理性。", video: supportedVideos.flashA, ratio: 0, image: supportedImages.protestB, durationMs: 36000 },
+      { pageLabel: "高潮", title: "太阳氦闪", text: "岸上的人还在庆祝，以为自己终于战胜了谎言。\n\n就在此时，太阳氦闪爆发了。暗红色的太阳慢慢膨胀，所有欢呼声一下子停住。\n\n人们终于明白：那些被冻死的人，才是真正清醒的人。\n\n他们明明知道自己会被当成骗子处死，却依然选择坚守；他们明明可以逃跑，却还是用生命守住了人类的未来。", video: supportedVideos.flashB, ratio: 0, image: supportedImages.flare, durationMs: 30000 },
+      { pageLabel: "主题", title: "高贵的人", text: "书里有一句话，我特别喜欢：‘我们必须抱有希望，这并不是因为希望真的存在，而是因为我们要做高贵的人。’\n\n《流浪地球》让我明白，希望也有两种。反叛军说‘回到太阳身边就安全了’，那其实只是假的安慰。\n\n没有现实支撑的希望是毒药。而真正的希望，是明明知道前方可能是绝路，依然选择走下去；是明明知道会被误解，依然选择坚守。\n\n这才是文明的火种。", image: supportedImages.light, durationMs: 34000 },
+      { pageLabel: "结尾", title: "结尾", text: "所以，如果你问我，读完《流浪地球》最大的感受是什么，我会说：不是害怕，不是悲伤，而是感动，更是敬佩。\n\n电影《流浪地球》里有一句话让我特别震撼：‘无论最终结果将人类历史导向何处，我们决定，选择希望。’\n\n我想，真正的希望，不是盲目乐观，而是在最黑暗的时候，依然守住理性，坚守信念，继续向前走。\n\n我想，即使真遇到世界末日，只要人类还愿意守住理性、坚守信念、选择希望，那么总有一天，我们还是会再次看到蓝天，也会看到鲜花重新挂满枝头。\n\n我的分享就到这里，谢谢大家！", image: supportedImages.earthrise, durationMs: 32000 }
     ];
 
     const slidesRoot = document.getElementById("slides");
@@ -621,29 +616,47 @@
     }
 
     function playVideo() {
+      if (!bgVideo.currentSrc && !bgVideo.getAttribute("src")) {
+        clipInfo.textContent = "当前页没有可播放的视频";
+        videoBtn.textContent = "播放视频";
+        return Promise.resolve(false);
+      }
+      if (bgVideo.readyState === 0) {
+        clipInfo.textContent = "视频还在加载中";
+        videoBtn.textContent = "播放视频";
+        return Promise.resolve(false);
+      }
       return bgVideo.play().then(() => {
         videoBtn.textContent = "暂停视频";
-      }).catch(() => {
-        clipInfo.textContent = "图片显示中";
+        return true;
+      }).catch((err) => {
+        clipInfo.textContent = `播放失败 - ${err && err.name ? err.name : "UnknownError"}`;
+        videoBtn.textContent = "播放视频";
+        return false;
       });
+    }
+
+    function applyFallbackTone(item) {
+      bgFallback.classList.remove("tone-cold", "tone-warm", "tone-hope", "portrait");
+      veil.classList.add("image-mode");
+      const label = `${item.pageLabel} ${item.title}`;
+      if (label.includes("致谢") || label.includes("感谢刘慈欣")) {
+        bgFallback.classList.add("portrait");
+      } else if (label.includes("高潮") || label.includes("太阳") || label.includes("开场") || label.includes("设定")) {
+        bgFallback.classList.add("tone-warm");
+      } else if (label.includes("希望") || label.includes("高贵") || label.includes("结尾") || label.includes("感受") || label.includes("钻石")) {
+        bgFallback.classList.add("tone-hope");
+      } else {
+        bgFallback.classList.add("tone-cold");
+      }
     }
 
     function showImage(item) {
       bgFallback.src = item.image || supportedImages.cover;
       bgFallback.classList.add("animated");
-      bgFallback.classList.remove("tone-cold", "tone-warm", "tone-hope", "portrait");
-      veil.classList.add("image-mode");
-      const label = `${item.pageLabel} ${item.title}`;
-      if (/致谢|刘慈欣/.test(label)) {
-        bgFallback.classList.add("portrait");
-      } else if (/高潮|太阳|开场|设定/.test(label)) {
-        bgFallback.classList.add("tone-warm");
-      } else if (/希望|高贵|结尾|感受|比生命|钻石/.test(label)) {
-        bgFallback.classList.add("tone-hope");
-      } else {
-        bgFallback.classList.add("tone-cold");
-      }
+      applyFallbackTone(item);
       bgVideo.pause();
+      bgVideo.ontimeupdate = null;
       bgVideo.removeAttribute("src");
       bgVideo.load();
       bgVideo.classList.add("hidden");
@@ -651,6 +664,27 @@
       videoBtn.textContent = "播放视频";
       videoBtn.disabled = true;
       videoBtn.style.opacity = "0.5";
+    }
+
+    function freezeVideoToAnimatedStill(item) {
+      if (!bgVideo.videoWidth || !bgVideo.videoHeight) {
+        showImage(item);
+        return;
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = bgVideo.videoWidth;
+      canvas.height = bgVideo.videoHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(bgVideo, 0, 0, canvas.width, canvas.height);
+      bgFallback.src = canvas.toDataURL("image/jpeg", 0.92);
+      bgFallback.classList.add("animated");
+      applyFallbackTone(item);
+      bgVideo.pause();
+      bgVideo.classList.add("hidden");
+      clipInfo.textContent = "静帧展示中";
+      videoBtn.textContent = "播放视频";
+      videoBtn.disabled = false;
+      videoBtn.style.opacity = "1";
     }
 
     function loadVideo(item) {
@@ -667,20 +701,29 @@
       };
 
       bgVideo.onloadedmetadata = () => {
+        const rate = item.playbackRate || 1;
+        let frozen = false;
+        const freezeFrame = () => {
+          if (frozen) return;
+          frozen = true;
+          bgVideo.ontimeupdate = null;
+          freezeVideoToAnimatedStill(item);
+        };
+        bgVideo.playbackRate = rate;
         const duration = bgVideo.duration;
         if (!duration || !Number.isFinite(duration)) {
           showImage(item);
           return;
         }
         segmentStart = Math.max(0, Math.min(duration - 0.3, duration * (item.ratio || 0)));
-        segmentEnd = Math.min(duration, segmentStart + Math.max(6, item.durationMs / 1000));
+        segmentEnd = Math.min(duration, segmentStart + Math.max(6, (item.durationMs / 1000) * rate));
         if (segmentEnd - segmentStart < 3) {
           segmentStart = 0;
-          segmentEnd = Math.min(duration, Math.max(6, item.durationMs / 1000));
+          segmentEnd = Math.min(duration, Math.max(6, (item.durationMs / 1000) * rate));
         }
         bgVideo.currentTime = segmentStart;
         bgVideo.ontimeupdate = () => {
-          if (bgVideo.currentTime >= segmentEnd - 0.08) bgVideo.currentTime = segmentStart;
+          if (bgVideo.currentTime >= segmentEnd - 0.08) freezeFrame();
         };
         clipInfo.textContent = "视频播放中";
         playVideo();
