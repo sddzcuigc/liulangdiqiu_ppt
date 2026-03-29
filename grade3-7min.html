@@ -164,6 +164,17 @@
       background:
         radial-gradient(circle at 50% 28%, rgba(7, 9, 13, 0.48) 0%, rgba(7, 9, 13, 0.28) 42%, rgba(7, 9, 13, 0.08) 74%, rgba(7, 9, 13, 0) 100%);
     }
+    .slide.tight-copy .copy {
+      max-width: min(72rem, 94vw);
+    }
+    .slide.tight-copy .copy::before {
+      inset: -1.5rem -1.9rem -1.8rem -1.6rem;
+    }
+    .slide.tight-copy .lead {
+      max-width: 36em;
+      font-size: clamp(0.92rem, 1.08vw, 1.08rem);
+      line-height: 1.72;
+    }
     .slide.cover h1 {
       max-width: none;
       margin: 1.4rem 0 1.4rem;
@@ -669,7 +680,7 @@
     let reportStarted = false;
 
     slidesRoot.innerHTML = deck.map((item, idx) => `
-      <section class="slide ${idx === 0 ? "active cover" : ""}">
+      <section class="slide ${idx === 0 ? "active cover" : ""}${[3,4,6].includes(idx) ? " tight-copy" : ""}">
         <div class="copy">
           <span class="eyebrow">${item.pageLabel} · 第 ${idx + 1} 页</span>
           <h${idx === 0 ? "1" : "2"}>${item.title}</h${idx === 0 ? "1" : "2"}>
@@ -1055,7 +1066,7 @@
     });
 
     function applyMaskBrightness() {
-      const opacity = stage.classList.contains("video-mode") ? 0 : Number(maskRange.value) / 100;
+      const opacity = Number(maskRange.value) / 100;
       veil.style.opacity = String(opacity);
     }
 
