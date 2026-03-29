@@ -626,6 +626,7 @@
           <span>蒙版</span>
           <input id="maskRange" type="range" min="0" max="100" value="16">
         </label>
+        <button class="btn" id="fullTextBtn" type="button">全文视图</button>
         <button class="btn" id="presenterBtn" type="button">演讲者视图</button>
         <button class="btn" id="fullscreenBtn" type="button">全屏</button>
       </div>
@@ -663,7 +664,9 @@
   </div>
 
   <script>
-    const isPresenter = new URLSearchParams(location.search).get("presenter") === "1";
+    const viewParams = new URLSearchParams(location.search);
+    const isPresenter = viewParams.get("presenter") === "1";
+    const isFullTextView = viewParams.get("fulltext") === "1";
     document.body.classList.toggle("presenter-mode", isPresenter);
     const supportedVideos = {
       coverIntro: "./assets/video/liulang2-home-2304-2315-slow.mp4",
@@ -836,6 +839,7 @@
     const musicBtn = document.getElementById("musicBtn");
     const volumeRange = document.getElementById("volumeRange");
     const maskRange = document.getElementById("maskRange");
+    const fullTextBtn = document.getElementById("fullTextBtn");
     const presenterBtn = document.getElementById("presenterBtn");
     const fullscreenBtn = document.getElementById("fullscreenBtn");
     const bgm = document.getElementById("bgm");
@@ -891,7 +895,7 @@
                   const parts = item.text.split("\\n");
                   return `<div class="cover-meta"><span class="school">${parts[0] || ""}</span><span class="author">${parts[1] || ""}</span><span class="date">${parts[2] || ""}</span></div><div class="cover-actions"><button class="start-btn" id="startReportBtn" type="button">开始汇报</button><span class="start-tip">点击后自动播放音乐，可用翻页笔、鼠标和快捷键翻页</span></div>`;
                 })()
-              : `<p class="lead">${isPresenter ? item.text : (item.audienceText || item.text)}</p>`
+              : `<p class="lead">${isPresenter || isFullTextView ? item.text : (item.audienceText || item.text)}</p>`
           }
         </div>
       </section>
@@ -903,8 +907,12 @@
       autoBtn.style.display = "none";
       autoPageBtn.style.display = "none";
       musicBtn.style.display = "none";
+      fullTextBtn.style.display = "none";
       presenterBtn.style.display = "none";
       bgm.muted = true;
+    }
+    if (isFullTextView) {
+      fullTextBtn.textContent = "精简视图";
     }
 
     function resolveVoices() {
@@ -1435,6 +1443,16 @@
       const url = new URL(location.href);
       url.searchParams.set('presenter', '1');
       window.open(url.toString(), 'wandering-earth-presenter', 'width=1600,height=960');
+    });
+    fullTextBtn.addEventListener('click', () => {
+      const url = new URL(location.href);
+      if (isFullTextView) {
+        url.searchParams.delete('fulltext');
+      } else {
+        url.searchParams.set('fulltext', '1');
+      }
+      url.searchParams.delete('presenter');
+      window.open(url.toString(), isFullTextView ? 'wandering-earth-audience-compact' : 'wandering-earth-audience-full', 'width=1600,height=960');
     });
 
     presenterPrevBtn?.addEventListener('click', () => {
