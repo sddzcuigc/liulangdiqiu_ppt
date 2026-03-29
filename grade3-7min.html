@@ -175,6 +175,151 @@
       font-size: clamp(0.92rem, 1.08vw, 1.08rem);
       line-height: 1.72;
     }
+    body.presenter-mode .stage {
+      display: block;
+    }
+    .presenter-panel {
+      display: none;
+    }
+    body.presenter-mode .presenter-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      padding: 2.2rem 3rem 2rem;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(186, 63, 18, 0.12), transparent 26%),
+        linear-gradient(180deg, rgba(7, 9, 13, 0.98), rgba(9, 12, 18, 0.98));
+      color: #fff4e8;
+      z-index: 6;
+      overflow: hidden;
+    }
+    body.presenter-mode .bg-video,
+    body.presenter-mode .bg-fallback,
+    body.presenter-mode .veil,
+    body.presenter-mode .slides,
+    body.presenter-mode .timer,
+    body.presenter-mode .progress,
+    body.presenter-mode .timer-readout,
+    body.presenter-mode .bottombar,
+    body.presenter-mode #autoBtn,
+    body.presenter-mode #autoPageBtn,
+    body.presenter-mode #videoBtn,
+    body.presenter-mode #musicBtn,
+    body.presenter-mode .volume-wrap,
+    body.presenter-mode .mask-wrap,
+    body.presenter-mode #presenterBtn {
+      display: none !important;
+    }
+    body.presenter-mode .topbar {
+      position: static;
+      padding: 0;
+      margin-bottom: 0.6rem;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: none;
+      background: transparent;
+    }
+    body.presenter-mode .topbar .actions {
+      gap: 0.8rem;
+    }
+    body.presenter-mode .topbar .meta {
+      gap: 0.8rem;
+    }
+    body.presenter-mode .topbar .pill {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.1);
+      color: rgba(255,244,232,0.88);
+    }
+    .presenter-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 1rem;
+      background: rgba(255,255,255,0.03);
+      padding: 0.9rem 1rem;
+    }
+    .presenter-card h3 {
+      margin: 0 0 0.65rem;
+      font-size: 1rem;
+      color: #ffd7bc;
+      letter-spacing: 0.04em;
+    }
+    .presenter-card .mini {
+      font-size: 0.88rem;
+      color: rgba(255,244,232,0.72);
+      margin-bottom: 0.55rem;
+    }
+    .presenter-card .notes {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      font-size: 0.98rem;
+    }
+    .presenter-actions {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    body.presenter-mode .presenter-card:first-child {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+      border: none;
+      background: transparent;
+    }
+    body.presenter-mode .presenter-card:first-child h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+    body.presenter-mode .presenter-card:nth-child(3) {
+      display: none;
+    }
+    body.presenter-mode .presenter-card:nth-child(2) {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1.35rem 1.5rem;
+      border-radius: 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      min-height: 0;
+    }
+    body.presenter-mode #presenterCurrentTitle {
+      font-size: 1.35rem;
+      margin-bottom: 0.5rem;
+    }
+    body.presenter-mode #presenterCurrentMeta {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      color: rgba(255,244,232,0.7);
+    }
+    body.presenter-mode #presenterCurrentNotes {
+      flex: 1;
+      overflow: hidden;
+      font-size: clamp(2rem, 2.8vw, 3rem);
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+      color: #fff7ef;
+      padding-right: 0.35rem;
+      position: relative;
+    }
+    body.presenter-mode #presenterCurrentNotes .teleprompter-content {
+      white-space: pre-wrap;
+      will-change: transform;
+      transform: translateY(0);
+    }
+    body.presenter-mode #presenterCurrentNotes::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 5rem;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(9, 12, 18, 0), rgba(9, 12, 18, 0.92));
+    }
     .slide.cover h1 {
       max-width: none;
       margin: 1.4rem 0 1.4rem;
@@ -481,6 +626,7 @@
           <span>蒙版</span>
           <input id="maskRange" type="range" min="0" max="100" value="16">
         </label>
+        <button class="btn" id="presenterBtn" type="button">演讲者视图</button>
         <button class="btn" id="fullscreenBtn" type="button">全屏</button>
       </div>
     </div>
@@ -494,9 +640,31 @@
     <audio id="bgm" loop preload="auto">
       <source src="./assets/audio/bgm.aac" type="audio/aac">
     </audio>
+    <aside class="presenter-panel" id="presenterPanel">
+      <div class="presenter-card">
+        <h3>演讲者视图</h3>
+        <div class="mini" id="presenterStatus">当前页</div>
+        <div class="presenter-actions">
+          <button class="btn" id="presenterPrevBtn" type="button">上一页</button>
+          <button class="btn" id="presenterNextBtn" type="button">下一页</button>
+        </div>
+      </div>
+      <div class="presenter-card">
+        <h3 id="presenterCurrentTitle">当前页</h3>
+        <div class="mini" id="presenterCurrentMeta"></div>
+        <div class="notes" id="presenterCurrentNotes"></div>
+      </div>
+      <div class="presenter-card">
+        <h3 id="presenterNextTitle">下一页</h3>
+        <div class="mini" id="presenterNextMeta"></div>
+        <div class="notes" id="presenterNextNotes"></div>
+      </div>
+    </aside>
   </div>
 
   <script>
+    const isPresenter = new URLSearchParams(location.search).get("presenter") === "1";
+    document.body.classList.toggle("presenter-mode", isPresenter);
     const supportedVideos = {
       coverIntro: "./assets/video/liulang2-home-2304-2315-slow.mp4",
       engine: "./assets/video/planet-engine-correct-front-55s-stable.mp4",
@@ -613,6 +781,22 @@
     }
     ];
 
+    const audienceTexts = [
+      "",
+      "“我没见过黑夜，我没见过星星，我没见过春天、秋天和冬天。”\n\n太阳即将在四百年内发生氦闪，人类决定带着地球一起上路。",
+      "一万两千台行星发动机，五个阶段，两千五百年。\n\n今天出发的人，看不到终点。",
+      "大海冻结，城市沉没，人类只能住进地下城。\n\n这个时代，死亡像影子一样，时时刻刻跟在人类身边。",
+      "五百年过去，太阳看起来还是老样子。\n\n于是，人类开始怀疑、开始分裂，反叛军出现了。",
+      "五千多名科学家和联合政府成员，被押上冰原。\n\n他们没有退缩，把信念坚持到了最后。",
+      "岸上的人还在庆祝。\n\n就在此时，太阳氦闪爆发了。\n\n人们终于明白：那些被冻死的人，才是真正清醒的人。",
+      "什么叫高贵的人？\n\n是在所有人都误解你时，依然不放弃自己的判断；\n是在结果残酷时，依然愿意为更多人守住未来。",
+      "《流浪地球》让我明白，希望也有两种。\n\n没有现实支撑的希望是毒药。\n而敢于直面绝望的希望，才是文明的火种。",
+      "在最黑暗的时候，\n人类最不能失去的，\n就是理性、信念和希望。\n\n谢谢大家！"
+    ];
+    deck.forEach((item, idx) => {
+      item.audienceText = audienceTexts[idx] || item.text;
+    });
+
     if (deck[1]) {
       Object.assign(deck[1], {
         videoScale: 1.28,
@@ -652,8 +836,18 @@
     const musicBtn = document.getElementById("musicBtn");
     const volumeRange = document.getElementById("volumeRange");
     const maskRange = document.getElementById("maskRange");
+    const presenterBtn = document.getElementById("presenterBtn");
     const fullscreenBtn = document.getElementById("fullscreenBtn");
     const bgm = document.getElementById("bgm");
+    const presenterCurrentTitle = document.getElementById("presenterCurrentTitle");
+    const presenterCurrentMeta = document.getElementById("presenterCurrentMeta");
+    const presenterCurrentNotes = document.getElementById("presenterCurrentNotes");
+    const presenterNextTitle = document.getElementById("presenterNextTitle");
+    const presenterNextMeta = document.getElementById("presenterNextMeta");
+    const presenterNextNotes = document.getElementById("presenterNextNotes");
+    const presenterPrevBtn = document.getElementById("presenterPrevBtn");
+    const presenterNextBtn = document.getElementById("presenterNextBtn");
+    const presenterStatus = document.getElementById("presenterStatus");
 
     let currentIndex = 0;
     let autoPlaying = false;
@@ -678,6 +872,13 @@
     let currentPageTargetMs = pageDurationMs[0];
     let controlsTimer = null;
     let reportStarted = false;
+    let presenterChannel = null;
+    let syncingFromRemote = false;
+    let presenterScrollTimer = null;
+    const presenterStateKey = "wandering-earth-grade3-7min-presenter-state";
+    const presenterCommandKey = "wandering-earth-grade3-7min-presenter-command";
+    let lastPresenterStateTs = 0;
+    let lastPresenterCommandTs = 0;
 
     slidesRoot.innerHTML = deck.map((item, idx) => `
       <section class="slide ${idx === 0 ? "active cover" : ""}${[3,4,6].includes(idx) ? " tight-copy" : ""}">
@@ -690,7 +891,7 @@
                   const parts = item.text.split("\\n");
                   return `<div class="cover-meta"><span class="school">${parts[0] || ""}</span><span class="author">${parts[1] || ""}</span><span class="date">${parts[2] || ""}</span></div><div class="cover-actions"><button class="start-btn" id="startReportBtn" type="button">开始汇报</button><span class="start-tip">点击后自动播放音乐，可用翻页笔、鼠标和快捷键翻页</span></div>`;
                 })()
-              : `<p class="lead">${item.text}</p>`
+              : `<p class="lead">${isPresenter ? item.text : (item.audienceText || item.text)}</p>`
           }
         </div>
       </section>
@@ -698,6 +899,13 @@
 
     const slides = [...document.querySelectorAll(".slide")];
     const startReportBtn = document.getElementById("startReportBtn");
+    if (isPresenter) {
+      autoBtn.style.display = "none";
+      autoPageBtn.style.display = "none";
+      musicBtn.style.display = "none";
+      presenterBtn.style.display = "none";
+      bgm.muted = true;
+    }
 
     function resolveVoices() {
       if (!window.speechSynthesis) return;
@@ -706,6 +914,122 @@
         voices.find((voice) => /xiaoxiao|晓晓/i.test(voice.name)) ||
         voices.find((voice) => /zh[-_]?cn|chinese|中文/i.test(`${voice.lang} ${voice.name}`)) ||
         null;
+    }
+
+    function updatePresenterPanel() {
+      if (!isPresenter) return;
+      const current = deck[currentIndex];
+      const next = deck[Math.min(deck.length - 1, currentIndex + 1)];
+      const compactText = (value) => (value || "")
+        .split("\r").join("")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .join("\n");
+      presenterCurrentTitle.textContent = current.title;
+      presenterCurrentMeta.textContent = 'Page ' + (currentIndex + 1) + ' · ' + current.pageLabel;
+      const currentContent = document.createElement("div");
+      currentContent.className = "teleprompter-content";
+      currentContent.textContent = compactText(current.text);
+      presenterCurrentNotes.replaceChildren(currentContent);
+      presenterNextTitle.textContent = next ? next.title : 'End';
+      presenterNextMeta.textContent = next ? ('Page ' + Math.min(deck.length, currentIndex + 2) + ' · ' + next.pageLabel) : '';
+      presenterNextNotes.textContent = next ? compactText(next.text) : '';
+      presenterStatus.textContent = 'Page ' + (currentIndex + 1) + ' / ' + deck.length;
+      restartTeleprompter(current);
+    }
+
+    function restartTeleprompter(item) {
+      if (!isPresenter || !presenterCurrentNotes) return;
+      cancelAnimationFrame(presenterScrollTimer);
+      const content = presenterCurrentNotes.querySelector(".teleprompter-content");
+      if (!content) return;
+      content.style.transform = "translateY(0)";
+      requestAnimationFrame(() => {
+        const maxScroll = content.scrollHeight - presenterCurrentNotes.clientHeight;
+        if (maxScroll <= 12) return;
+        const cleanText = (item.speechText || item.text || "").replace(/\s+/g, "");
+        const speechBasedDuration = 5200 + cleanText.length * 520;
+        const duration = Math.max(getItemDurationMs(item) + 4000, speechBasedDuration);
+        const leadInMs = 1800;
+        const startedAt = performance.now();
+        const step = () => {
+          const elapsed = Math.max(0, performance.now() - startedAt - leadInMs);
+          const ratio = Math.min(1, elapsed / duration);
+          content.style.transform = `translateY(-${maxScroll * ratio}px)`;
+          if (ratio < 1) {
+            presenterScrollTimer = requestAnimationFrame(step);
+          }
+        };
+        presenterScrollTimer = requestAnimationFrame(step);
+      });
+    }
+
+    function broadcastPresenterState() {
+      if (syncingFromRemote) return;
+      const payload = { currentIndex, ts: Date.now() };
+      lastPresenterStateTs = payload.ts;
+      try { localStorage.setItem(presenterStateKey, JSON.stringify(payload)); } catch {}
+      if (presenterChannel) presenterChannel.postMessage(payload);
+    }
+
+    function applyRemotePresenterState(payload) {
+      if (!payload || typeof payload.currentIndex !== "number") return;
+      if (payload.ts && payload.ts <= lastPresenterStateTs) return;
+      if (payload.ts) lastPresenterStateTs = payload.ts;
+      if (payload.currentIndex === currentIndex) return;
+      syncingFromRemote = true;
+      goTo(payload.currentIndex);
+      syncingFromRemote = false;
+    }
+
+    function sendPresenterCommand(nextIndex) {
+      const payload = {
+        currentIndex: Math.max(0, Math.min(deck.length - 1, nextIndex)),
+        ts: Date.now()
+      };
+      lastPresenterCommandTs = payload.ts;
+      try { localStorage.setItem(presenterCommandKey, JSON.stringify(payload)); } catch {}
+      return payload;
+    }
+
+    function applyPresenterCommand(payload) {
+      if (!payload || typeof payload.currentIndex !== "number") return;
+      if (payload.ts && payload.ts <= lastPresenterCommandTs) return;
+      if (payload.ts) lastPresenterCommandTs = payload.ts;
+      syncingFromRemote = true;
+      goTo(payload.currentIndex);
+      syncingFromRemote = false;
+    }
+
+    function getOpenerApi() {
+      try {
+        if (window.opener && !window.opener.closed && window.opener.__wanderingEarthPresenterApi) {
+          return window.opener.__wanderingEarthPresenterApi;
+        }
+      } catch {}
+      return null;
+    }
+
+    function requestPresenterNavigation(delta) {
+      const openerApi = getOpenerApi();
+      let baseIndex = currentIndex;
+      if (openerApi) {
+        try {
+          const state = openerApi.getState?.();
+          if (state && typeof state.currentIndex === "number") {
+            baseIndex = state.currentIndex;
+          }
+        } catch {}
+      }
+      const targetIndex = Math.max(0, Math.min(deck.length - 1, baseIndex + delta));
+      const payload = sendPresenterCommand(targetIndex);
+      if (openerApi) {
+        try {
+          openerApi.goTo(targetIndex);
+        } catch {}
+      }
+      applyRemotePresenterState(payload);
     }
 
     function updateShell() {
@@ -945,6 +1269,13 @@
     }
 
     function loadCurrentBackground() {
+      if (isPresenter) {
+        bgVideo.pause();
+        bgVideo.ontimeupdate = null;
+        bgVideo.removeAttribute("src");
+        bgVideo.load();
+        return;
+      }
       const item = deck[currentIndex];
       if (item.video) {
         loadVideo(item);
@@ -1030,6 +1361,8 @@
       updateShell();
       loadCurrentBackground();
       startClipProgress(pageDurationMs[currentIndex]);
+      updatePresenterPanel();
+      broadcastPresenterState();
     }
 
     autoBtn.addEventListener("click", () => {
@@ -1097,6 +1430,57 @@
       showControls();
       status.textContent = "汇报开始";
     }
+    presenterBtn.addEventListener('click', () => {
+      broadcastPresenterState();
+      const url = new URL(location.href);
+      url.searchParams.set('presenter', '1');
+      window.open(url.toString(), 'wandering-earth-presenter', 'width=1600,height=960');
+    });
+
+    presenterPrevBtn?.addEventListener('click', () => {
+      requestPresenterNavigation(-1);
+    });
+    presenterNextBtn?.addEventListener('click', () => {
+      requestPresenterNavigation(1);
+    });
+
+    if ('BroadcastChannel' in window) {
+      presenterChannel = new BroadcastChannel('wandering-earth-grade3-7min');
+      presenterChannel.onmessage = (event) => {
+        if (isPresenter) applyRemotePresenterState(event.data);
+      };
+    }
+    window.addEventListener('storage', (event) => {
+      if (!isPresenter || event.key !== presenterStateKey || !event.newValue) return;
+      try {
+        applyRemotePresenterState(JSON.parse(event.newValue));
+      } catch {}
+    });
+    if (isPresenter) {
+      try {
+        const openerApi = getOpenerApi();
+        if (openerApi) applyRemotePresenterState(openerApi.getState());
+        const saved = localStorage.getItem(presenterStateKey);
+        if (saved) applyRemotePresenterState(JSON.parse(saved));
+      } catch {}
+    }
+
+    setInterval(() => {
+      try {
+        if (isPresenter) {
+          const openerApi = getOpenerApi();
+          if (openerApi) {
+            applyRemotePresenterState(openerApi.getState());
+            return;
+          }
+          const saved = localStorage.getItem(presenterStateKey);
+          if (saved) applyRemotePresenterState(JSON.parse(saved));
+        } else {
+          const command = localStorage.getItem(presenterCommandKey);
+          if (command) applyPresenterCommand(JSON.parse(command));
+        }
+      } catch {}
+    }, 300);
 
     fullscreenBtn.addEventListener("click", async () => {
       if (!document.fullscreenElement) {
@@ -1157,7 +1541,21 @@
     }, { once: true });
 
     document.addEventListener("click", (event) => {
+      if (!isPresenter) return;
+      const target = event.target;
+      if (target.closest(".btn") || target.closest("input") || target.closest(".topbar") || target.closest("a")) {
+        return;
+      }
+      if (event.clientX > window.innerWidth * 0.55) {
+        requestPresenterNavigation(1);
+      } else if (event.clientX < window.innerWidth * 0.45) {
+        requestPresenterNavigation(-1);
+      }
+    });
+
+    document.addEventListener("click", (event) => {
       showControls();
+      if (isPresenter) return;
       const target = event.target;
       if (
         target.closest(".btn") ||
@@ -1192,6 +1590,8 @@
     updateShell();
     loadCurrentBackground();
     startClipProgress(pageDurationMs[0]);
+    updatePresenterPanel();
+    broadcastPresenterState();
     applyMaskBrightness();
     showControls();
   </script>
