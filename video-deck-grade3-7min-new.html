@@ -1185,6 +1185,30 @@
       });
     }
 
+    async function preloadAsset(asset) {
+      if (asset.type === "image") await preloadImage(asset.src);
+      if (asset.type === "video") await preloadVideo(asset.src);
+      if (asset.type === "audio") await preloadAudio(asset.src);
+    }
+
+    async function preloadAssetsConcurrent(assets, total, startDone = 0, concurrency = 4) {
+      let done = startDone;
+      let cursor = 0;
+      async function worker() {
+        while (cursor < assets.length) {
+          const index = cursor;
+          cursor += 1;
+          const asset = assets[index];
+          await preloadAsset(asset);
+          done += 1;
+          setLoadingProgress(done, total, asset.src.split("/").pop());
+        }
+      }
+      const workers = Array.from({ length: Math.min(concurrency, assets.length) }, () => worker());
+      await Promise.all(workers);
+      return done;
+    }
+
     async function preloadDeckAssets() {
       if (isPresenter) {
         assetsReady = true;
@@ -1205,16 +1229,13 @@
       addAsset("audio", "./assets/audio/bgm.mp3");
       addAsset("audio", "./assets/audio/bgm.aac");
 
-      setLoadingProgress(0, assets.length);
-      for (let i = 0; i < assets.length; i += 1) {
-        const asset = assets[i];
-        if (asset.type === "image") await preloadImage(asset.src);
-        if (asset.type === "video") await preloadVideo(asset.src);
-        if (asset.type === "audio") await preloadAudio(asset.src);
-        setLoadingProgress(i + 1, assets.length, asset.src.split("/").pop());
-      }
+      const total = assets.length;
+      loadingText.textContent = "正在并发加载全部素材，请稍候…";
+      setLoadingProgress(0, total);
+      const done = await preloadAssetsConcurrent(assets, total, 0, 4);
       assetsReady = true;
       loadingText.textContent = "素材加载完成，正在进入放映";
+      loadingMeta.textContent = `${done} / ${total}`;
       loadingScreen.classList.add("hidden");
       status.textContent = "素材加载完成";
     }
