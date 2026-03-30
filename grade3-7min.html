@@ -639,6 +639,7 @@
     <div class="timer"><span id="clipProgress"></span></div>
     <div class="timer-readout" id="timerDisplay"><strong>计时</strong><span>总时长 00:00 · 本页 00:00 / 00:00</span></div>
     <audio id="bgm" loop preload="auto">
+      <source src="./assets/audio/bgm.mp3" type="audio/mpeg">
       <source src="./assets/audio/bgm.aac" type="audio/aac">
     </audio>
     <aside class="presenter-panel" id="presenterPanel">
@@ -879,6 +880,7 @@
     let presenterChannel = null;
     let syncingFromRemote = false;
     let presenterScrollTimer = null;
+    let bgmPendingAutoplay = false;
     const presenterStateKey = "wandering-earth-grade3-7min-presenter-state";
     const presenterCommandKey = "wandering-earth-grade3-7min-presenter-command";
     let lastPresenterStateTs = 0;
@@ -1045,6 +1047,25 @@
       counter.textContent = `${String(currentIndex + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
       deckProgress.style.width = `${((currentIndex + 1) / deck.length) * 100}%`;
       document.title = `《流浪地球》视频演讲版 - ${currentIndex + 1}/${deck.length}`;
+    }
+
+    function tryPlayBgm() {
+      if (isPresenter) return Promise.resolve(false);
+      bgm.volume = Number(volumeRange.value) / 100;
+      return bgm.play().then(() => {
+        bgmPendingAutoplay = false;
+        musicBtn.textContent = "暂停音乐";
+        return true;
+      }).catch(() => {
+        bgmPendingAutoplay = true;
+        musicBtn.textContent = "播放音乐";
+        return false;
+      });
+    }
+
+    function retryPendingBgm() {
+      if (!bgmPendingAutoplay || !bgm.paused || isPresenter) return;
+      tryPlayBgm();
     }
 
     function stopSpeech() {
@@ -1336,10 +1357,7 @@
       speechEnabled = true;
       autoBtn.textContent = "停止自动播放";
       autoPageBtn.textContent = "自动翻页";
-      bgm.volume = Number(volumeRange.value) / 100;
-      bgm.play().then(() => {
-        musicBtn.textContent = "暂停音乐";
-      }).catch(() => {});
+      tryPlayBgm();
       loadCurrentBackground();
       startClipProgress(pageDurationMs[currentIndex]);
       const speakingStarted = speakCurrent();
@@ -1353,10 +1371,7 @@
       speechEnabled = false;
       autoBtn.textContent = "自动播放朗读";
       autoPageBtn.textContent = "停止自动翻页";
-      bgm.volume = Number(volumeRange.value) / 100;
-      bgm.play().then(() => {
-        musicBtn.textContent = "暂停音乐";
-      }).catch(() => {});
+      tryPlayBgm();
       stopSpeech();
       loadCurrentBackground();
       startClipProgress(pageDurationMs[currentIndex]);
@@ -1394,10 +1409,10 @@
 
     musicBtn.addEventListener("click", () => {
       if (bgm.paused) {
-        bgm.volume = Number(volumeRange.value) / 100;
-        bgm.play().then(() => { musicBtn.textContent = "暂停音乐"; }).catch(() => {});
+        tryPlayBgm();
       } else {
         bgm.pause();
+        bgmPendingAutoplay = false;
         musicBtn.textContent = "播放音乐";
       }
     });
@@ -1424,10 +1439,7 @@
     async function startReport() {
       reportStarted = true;
       if (startReportBtn) startReportBtn.style.display = "none";
-      bgm.volume = Number(volumeRange.value) / 100;
-      bgm.play().then(() => {
-        musicBtn.textContent = "暂停音乐";
-      }).catch(() => {});
+      tryPlayBgm();
       if (!document.fullscreenElement) {
         try {
           await document.documentElement.requestFullscreen();
@@ -1512,6 +1524,7 @@
 
     document.addEventListener("keydown", (event) => {
       showControls();
+      retryPendingBgm();
       if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " " || event.key === "Enter" || event.key === "NumpadEnter" || event.key.toLowerCase() === "n") {
         event.preventDefault();
         goTo(currentIndex + 1);
@@ -1555,10 +1568,12 @@
 
     document.addEventListener("click", () => {
       showControls();
+      retryPendingBgm();
       if (!videoBtn.disabled) playVideo();
     }, { once: true });
 
     document.addEventListener("click", (event) => {
+      retryPendingBgm();
       if (!isPresenter) return;
       const target = event.target;
       if (target.closest(".btn") || target.closest("input") || target.closest(".topbar") || target.closest("a")) {
@@ -1573,6 +1588,7 @@
 
     document.addEventListener("click", (event) => {
       showControls();
+      retryPendingBgm();
       if (isPresenter) return;
       const target = event.target;
       if (
