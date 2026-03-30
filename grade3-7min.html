@@ -886,6 +886,11 @@
     let lastPresenterStateTs = 0;
     let lastPresenterCommandTs = 0;
 
+    if (!isPresenter) {
+      lastPresenterCommandTs = Date.now();
+      try { localStorage.removeItem(presenterCommandKey); } catch {}
+    }
+
     slidesRoot.innerHTML = deck.map((item, idx) => `
       <section class="slide ${idx === 0 ? "active cover" : ""}${[3,4,6].includes(idx) ? " tight-copy" : ""}">
         <div class="copy">
