@@ -1236,6 +1236,7 @@
       assetsReady = true;
       loadingText.textContent = "素材加载完成，正在进入放映";
       loadingMeta.textContent = `${done} / ${total}`;
+      loadCurrentBackground();
       loadingScreen.classList.add("hidden");
       status.textContent = "素材加载完成";
     }
@@ -1617,6 +1618,7 @@
       if (!assetsReady) return;
       reportStarted = true;
       if (startReportBtn) startReportBtn.style.display = "none";
+      loadCurrentBackground();
       tryPlayBgm();
       if (!document.fullscreenElement) {
         try {
