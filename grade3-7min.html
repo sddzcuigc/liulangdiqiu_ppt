@@ -556,6 +556,63 @@
       color: #ffd9bf;
       font-weight: 600;
     }
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at top, rgba(186, 63, 18, 0.16), transparent 26%),
+        linear-gradient(180deg, rgba(6, 8, 12, 0.98), rgba(7, 10, 16, 0.98));
+      transition: opacity 360ms ease, visibility 360ms ease;
+    }
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loading-card {
+      width: min(34rem, 88vw);
+      padding: 1.5rem 1.6rem;
+      border-radius: 1.4rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.3);
+    }
+    .loading-title {
+      font-size: 1.2rem;
+      color: #fff3e6;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.6rem;
+    }
+    .loading-text {
+      color: rgba(255,244,232,0.72);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .loading-bar {
+      height: 0.7rem;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .loading-bar > span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff9b6a, #ffd2b2);
+      transition: width 180ms ease;
+    }
+    .loading-meta {
+      margin-top: 0.75rem;
+      color: rgba(255,244,232,0.74);
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+    }
 
     @keyframes kenburns {
       0% {
@@ -604,6 +661,14 @@
 </head>
 <body>
   <div class="stage">
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-card">
+        <div class="loading-title">正在加载素材</div>
+        <div class="loading-text" id="loadingText">正在为放映准备图片、视频和音乐，请稍候……</div>
+        <div class="loading-bar"><span id="loadingBar"></span></div>
+        <div class="loading-meta" id="loadingMeta">0 / 0</div>
+      </div>
+    </div>
     <video class="bg-video" id="bgVideo" muted playsinline preload="auto" autoplay></video>
     <img class="bg-fallback" id="bgFallback" src="./assets/images/01.jpg" alt="背景">
     <div class="veil"></div>
@@ -827,6 +892,10 @@
     const slidesRoot = document.getElementById("slides");
     const bgVideo = document.getElementById("bgVideo");
     const bgFallback = document.getElementById("bgFallback");
+    const loadingScreen = document.getElementById("loadingScreen");
+    const loadingBar = document.getElementById("loadingBar");
+    const loadingText = document.getElementById("loadingText");
+    const loadingMeta = document.getElementById("loadingMeta");
     const veil = document.querySelector(".veil");
     const counter = document.getElementById("counter");
     const deckProgress = document.getElementById("deckProgress");
@@ -881,6 +950,7 @@
     let syncingFromRemote = false;
     let presenterScrollTimer = null;
     let bgmPendingAutoplay = false;
+    let assetsReady = false;
     const presenterStateKey = "wandering-earth-grade3-7min-presenter-state";
     const presenterCommandKey = "wandering-earth-grade3-7min-presenter-command";
     let lastPresenterStateTs = 0;
@@ -1066,6 +1136,87 @@
         musicBtn.textContent = "播放音乐";
         return false;
       });
+    }
+
+    function setLoadingProgress(done, total, currentLabel = "") {
+      const safeTotal = Math.max(total, 1);
+      const ratio = Math.min(1, done / safeTotal);
+      loadingBar.style.width = `${ratio * 100}%`;
+      loadingMeta.textContent = `${done} / ${total}`;
+      if (currentLabel) {
+        loadingText.textContent = `正在加载：${currentLabel}`;
+      }
+    }
+
+    function preloadImage(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = src;
+      });
+    }
+
+    function preloadAudio(src) {
+      return new Promise((resolve) => {
+        const audio = document.createElement("audio");
+        const done = () => resolve();
+        audio.preload = "auto";
+        audio.addEventListener("loadeddata", done, { once: true });
+        audio.addEventListener("canplaythrough", done, { once: true });
+        audio.addEventListener("error", done, { once: true });
+        audio.src = src;
+        audio.load();
+      });
+    }
+
+    function preloadVideo(src) {
+      return new Promise((resolve) => {
+        const video = document.createElement("video");
+        const done = () => resolve();
+        video.preload = "auto";
+        video.muted = true;
+        video.playsInline = true;
+        video.addEventListener("loadeddata", done, { once: true });
+        video.addEventListener("canplay", done, { once: true });
+        video.addEventListener("error", done, { once: true });
+        video.src = src;
+        video.load();
+      });
+    }
+
+    async function preloadDeckAssets() {
+      if (isPresenter) {
+        assetsReady = true;
+        loadingScreen.classList.add("hidden");
+        return;
+      }
+      const assets = [];
+      const seen = new Set();
+      const addAsset = (type, src) => {
+        if (!src || seen.has(src)) return;
+        seen.add(src);
+        assets.push({ type, src });
+      };
+      deck.forEach((item) => {
+        addAsset("image", item.image);
+        addAsset("video", item.video);
+      });
+      addAsset("audio", "./assets/audio/bgm.mp3");
+      addAsset("audio", "./assets/audio/bgm.aac");
+
+      setLoadingProgress(0, assets.length);
+      for (let i = 0; i < assets.length; i += 1) {
+        const asset = assets[i];
+        if (asset.type === "image") await preloadImage(asset.src);
+        if (asset.type === "video") await preloadVideo(asset.src);
+        if (asset.type === "audio") await preloadAudio(asset.src);
+        setLoadingProgress(i + 1, assets.length, asset.src.split("/").pop());
+      }
+      assetsReady = true;
+      loadingText.textContent = "素材加载完成，正在进入放映";
+      loadingScreen.classList.add("hidden");
+      status.textContent = "素材加载完成";
     }
 
     function retryPendingBgm() {
@@ -1442,6 +1593,7 @@
     }
 
     async function startReport() {
+      if (!assetsReady) return;
       reportStarted = true;
       if (startReportBtn) startReportBtn.style.display = "none";
       tryPlayBgm();
@@ -1633,6 +1785,7 @@
     broadcastPresenterState();
     applyMaskBrightness();
     showControls();
+    preloadDeckAssets();
   </script>
 </body>
 </html>
