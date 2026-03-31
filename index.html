@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>銆婃祦娴湴鐞冦€嬭棰戞紨璁茬増</title>
+  <title>《流浪地球》视频演讲版</title>
   <style>
     :root {
       --bg: #050608;
@@ -63,11 +63,6 @@
       transform-origin: center center;
       object-position: var(--fallback-pos, center center);
       transition: filter 480ms ease, opacity 280ms ease;
-    }
-    .bg-fallback.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
     }
 
     .bg-fallback.animated {
@@ -139,9 +134,9 @@
       inset: -2rem -2.5rem -2.4rem -2rem;
       border-radius: 2rem;
       background:
-        radial-gradient(circle at 18% 28%, rgba(7, 9, 13, 0.66) 0%, rgba(7, 9, 13, 0.46) 34%, rgba(7, 9, 13, 0.18) 62%, rgba(7, 9, 13, 0.02) 100%),
-        linear-gradient(90deg, rgba(7, 9, 13, 0.56) 0%, rgba(7, 9, 13, 0.34) 54%, rgba(7, 9, 13, 0.08) 100%);
-      filter: blur(16px);
+        radial-gradient(circle at 18% 28%, rgba(7, 9, 13, 0.72) 0%, rgba(7, 9, 13, 0.5) 34%, rgba(7, 9, 13, 0.22) 62%, rgba(7, 9, 13, 0.04) 100%),
+        linear-gradient(90deg, rgba(7, 9, 13, 0.62) 0%, rgba(7, 9, 13, 0.38) 54%, rgba(7, 9, 13, 0.1) 100%);
+      filter: blur(18px);
       opacity: 0.98;
       pointer-events: none;
       z-index: -1;
@@ -151,10 +146,10 @@
       z-index: 1;
     }
     .stage.video-mode .copy::before {
-      opacity: 0.88;
+      opacity: 0.94;
     }
     .stage.video-mode .slide.cover .copy::before {
-      opacity: 0.78;
+      opacity: 0.86;
     }
     .slide.cover {
       align-items: center;
@@ -167,7 +162,7 @@
     .slide.cover .copy::before {
       inset: -2.6rem -2.4rem -3rem -2.4rem;
       background:
-        radial-gradient(circle at 50% 28%, rgba(7, 9, 13, 0.58) 0%, rgba(7, 9, 13, 0.34) 42%, rgba(7, 9, 13, 0.12) 74%, rgba(7, 9, 13, 0.02) 100%);
+        radial-gradient(circle at 50% 28%, rgba(7, 9, 13, 0.48) 0%, rgba(7, 9, 13, 0.28) 42%, rgba(7, 9, 13, 0.08) 74%, rgba(7, 9, 13, 0) 100%);
     }
     .slide.tight-copy .copy {
       max-width: min(72rem, 94vw);
@@ -177,8 +172,8 @@
     }
     .slide.tight-copy .lead {
       max-width: 36em;
-      font-size: clamp(0.92rem, 1.08vw, 1.08rem);
-      line-height: 1.72;
+      font-size: clamp(1rem, 1.28vw, 1.24rem);
+      line-height: 1.9;
     }
     body.presenter-mode .stage {
       display: block;
@@ -668,66 +663,66 @@
   <div class="stage">
     <div class="loading-screen" id="loadingScreen">
       <div class="loading-card">
-        <div class="loading-title">姝ｅ湪鍔犺浇绱犳潗</div>
-        <div class="loading-text" id="loadingText">姝ｅ湪涓烘斁鏄犲噯澶囧浘鐗囥€佽棰戝拰闊充箰锛岃绋嶅€欌€︹€?/div>
+        <div class="loading-title">正在加载素材</div>
+        <div class="loading-text" id="loadingText">正在为放映准备图片、视频和音乐，请稍候……</div>
         <div class="loading-bar"><span id="loadingBar"></span></div>
         <div class="loading-meta" id="loadingMeta">0 / 0</div>
       </div>
     </div>
     <video class="bg-video" id="bgVideo" muted playsinline preload="auto" autoplay></video>
-    <img class="bg-fallback" id="bgFallback" src="./assets/images/01.jpg" alt="鑳屾櫙">
+    <img class="bg-fallback" id="bgFallback" src="./assets/images/01.jpg" alt="背景">
     <div class="veil"></div>
     <main class="slides" id="slides"></main>
     <div class="topbar">
       <div class="meta">
         <span class="pill" id="counter">01 / 13</span>
-        <span class="pill">宕旀姢鍒朵綔</span>
+        <span class="pill">崔护制作</span>
       </div>
       <div class="actions">
-        <button class="btn" id="autoBtn" type="button">鑷姩鎾斁鏈楄</button>
-        <button class="btn" id="autoPageBtn" type="button">鑷姩缈婚〉</button>
-        <button class="btn" id="videoBtn" type="button">鎾斁瑙嗛</button>
-        <button class="btn" id="musicBtn" type="button">鎾斁闊充箰</button>
+        <button class="btn" id="autoBtn" type="button">自动播放朗读</button>
+        <button class="btn" id="autoPageBtn" type="button">自动翻页</button>
+        <button class="btn" id="videoBtn" type="button">播放视频</button>
+        <button class="btn" id="musicBtn" type="button">播放音乐</button>
         <label class="volume-wrap" for="volumeRange">
-          <span>闊抽噺</span>
+          <span>音量</span>
           <input id="volumeRange" type="range" min="0" max="100" value="72">
         </label>
         <label class="mask-wrap" for="maskRange">
-          <span>钂欑増</span>
+          <span>蒙版</span>
           <input id="maskRange" type="range" min="0" max="100" value="16">
         </label>
-        <button class="btn" id="fullTextBtn" type="button">鍏ㄦ枃瑙嗗浘</button>
-        <button class="btn" id="presenterBtn" type="button">婕旇鑰呰鍥?/button>
-        <button class="btn" id="fullscreenBtn" type="button">鍏ㄥ睆</button>
+        <button class="btn" id="fullTextBtn" type="button">全文视图</button>
+        <button class="btn" id="presenterBtn" type="button">演讲者视图</button>
+        <button class="btn" id="fullscreenBtn" type="button">全屏</button>
       </div>
     </div>
     <div class="bottombar">
-      <div class="status" id="status">寰呭惎鍔?/div>
-      <div class="status" id="clipInfo">鑳屾櫙寰呭姞杞?/div>
+      <div class="status" id="status">待启动</div>
+      <div class="status" id="clipInfo">背景待加载</div>
     </div>
     <div class="progress"><span id="deckProgress"></span></div>
     <div class="timer"><span id="clipProgress"></span></div>
-    <div class="timer-readout" id="timerDisplay"><strong>璁℃椂</strong><span>鎬绘椂闀?00:00 路 鏈〉 00:00 / 00:00</span></div>
+    <div class="timer-readout" id="timerDisplay"><strong>计时</strong><span>总时长 00:00 · 本页 00:00 / 00:00</span></div>
     <audio id="bgm" loop preload="auto">
       <source src="./assets/audio/bgm.mp3" type="audio/mpeg">
       <source src="./assets/audio/bgm.aac" type="audio/aac">
     </audio>
     <aside class="presenter-panel" id="presenterPanel">
       <div class="presenter-card">
-        <h3>婕旇鑰呰鍥?/h3>
-        <div class="mini" id="presenterStatus">褰撳墠椤?/div>
+        <h3>演讲者视图</h3>
+        <div class="mini" id="presenterStatus">当前页</div>
         <div class="presenter-actions">
-          <button class="btn" id="presenterPrevBtn" type="button">涓婁竴椤?/button>
-          <button class="btn" id="presenterNextBtn" type="button">涓嬩竴椤?/button>
+          <button class="btn" id="presenterPrevBtn" type="button">上一页</button>
+          <button class="btn" id="presenterNextBtn" type="button">下一页</button>
         </div>
       </div>
       <div class="presenter-card">
-        <h3 id="presenterCurrentTitle">褰撳墠椤?/h3>
+        <h3 id="presenterCurrentTitle">当前页</h3>
         <div class="mini" id="presenterCurrentMeta"></div>
         <div class="notes" id="presenterCurrentNotes"></div>
       </div>
       <div class="presenter-card">
-        <h3 id="presenterNextTitle">涓嬩竴椤?/h3>
+        <h3 id="presenterNextTitle">下一页</h3>
         <div class="mini" id="presenterNextMeta"></div>
         <div class="notes" id="presenterNextNotes"></div>
       </div>
@@ -737,11 +732,8 @@
   <script>
     const viewParams = new URLSearchParams(location.search);
     const isPresenter = viewParams.get("presenter") === "1";
-    const isFullTextView = viewParams.get("fulltext") === "1";
-    const isWarmOpen = viewParams.get("warm") === "1";
+    const isFullTextView = viewParams.get("fulltext") !== "0";
     document.body.classList.toggle("presenter-mode", isPresenter);
-    const preloadReadyKey = "wandering-earth-grade3-7min-new-preload-ready";
-    const preloadedMediaUrls = new Map();
     const supportedVideos = {
       coverIntro: "./assets/video/liulang2-home-2304-2315-slow.mp4",
       engine: "./assets/video/planet-engine-correct-front-55s-stable.mp4",
@@ -772,111 +764,112 @@
     };
 
   const deck = [
-    {
-      pageLabel: "灏侀潰",
-      title: "銆婃祦娴湴鐞冦€嬭涔﹀垎浜?,
-      text: "瀹佹触鍘跨浜屽疄楠屽皬瀛?涓夊勾绾у叚鐝? \n宕旀姢  \n2026骞?鏈?,
-      speechText: "灏婃暚鐨勮€佸笀銆佷翰鐖辩殑鍚屽浠紝澶у濂斤紒浠婂ぉ鎴戞兂鍜屽ぇ瀹跺垎浜垬鎱堟鐖风埛鐨勭粡鍏哥骞讳綔鍝併€婃祦娴湴鐞冦€嬶紝杩欐槸涓€涓叧浜庡湴鐞冨拰浜虹被锛屽湪缁濆涓鎵惧笇鏈涚殑鏁呬簨銆?,
-      video: "./assets/video/liulang2-home-2304-2315-slow.mp4",
-      ratio: 0,
-      image: "./assets/images/01.jpg",
-      durationMs: 14000
-    },
-    {
-      pageLabel: "寮€鍦?,
-      title: "寮€鍦?,
-      text: "寮€绡囩涓€鍙ヨ瘽灏辫鎴戝嵃璞＄壒鍒繁锛歕n鈥滄垜娌¤杩囬粦澶滐紝鎴戞病瑙佽繃鏄熸槦锛屾垜娌¤杩囨槬澶┿€佺澶╁拰鍐ぉ銆傗€漒n\n鏁呬簨閲岀殑涓讳汉鍏紝涓€鍑虹敓鍦扮悆灏卞仠姝㈣嚜杞簡锛岃€岃繖涓€鍒囩殑鏍规簮锛岄兘鏄垜浠殑澶槼銆俓n\n涓変釜澶氫笘绾互鍓嶏紝绉戝瀹跺彂鐜帮紝澶槼鍥涚櫨骞村唴浼氬彂鐢熸唉闂紝鑶ㄨ儉鎴愮孩宸ㄦ槦锛屾妸鍦扮悆褰诲簳鍚炲櫖銆俓n\n鏈変汉璇达細\n鈥滀汉绫诲湪瀹囧畽闂寸寮€浜嗗湴鐞冿紝灏卞儚濠村効鍦ㄦ矙婕犻噷绂诲紑浜嗘瘝浜层€傗€漒n\n浜庢槸浜虹被鍋氫簡涓€涓棤姣斿媷鏁㈢殑鍐冲畾锛氱粰鍦扮悆瑁呬笂鍙戝姩鏈猴紝甯︾潃鎴戜滑鍥涘崄鍏嚎骞寸殑瀹讹紝涓€璧峰幓瀹囧畽娴佹氮锛?,
-      speechText: "寮€绡囩涓€鍙ヨ瘽灏辫鎴戝嵃璞＄壒鍒繁锛氭垜娌¤杩囬粦澶滐紝鎴戞病瑙佽繃鏄熸槦锛屾垜娌¤杩囨槬澶┿€佺澶╁拰鍐ぉ銆傛晠浜嬮噷鐨勪富浜哄叕锛屼竴鍑虹敓鍦扮悆灏卞仠姝㈣嚜杞簡锛岃€岃繖涓€鍒囩殑鏍规簮锛岄兘鏄垜浠殑澶槼銆備笁涓涓栫邯浠ュ墠锛岀瀛﹀鍙戠幇锛屽お闃冲洓鐧惧勾鍐呬細鍙戠敓姘﹂棯锛岃啫鑳€鎴愮孩宸ㄦ槦锛屾妸鍦扮悆褰诲簳鍚炲櫖銆傛湁浜鸿锛屼汉绫诲湪瀹囧畽闂寸寮€浜嗗湴鐞冿紝灏卞儚濠村効鍦ㄦ矙婕犻噷绂诲紑浜嗘瘝浜层€備簬鏄汉绫诲仛浜嗕竴涓棤姣斿媷鏁㈢殑鍐冲畾锛氱粰鍦扮悆瑁呬笂鍙戝姩鏈猴紝甯︾潃鎴戜滑鍥涘崄鍏嚎骞寸殑瀹讹紝涓€璧峰幓瀹囧畽娴佹氮锛?,
-      video: "./assets/video/solar-aging-near-sun-612-717.mp4",
-      ratio: 0,
-      image: "./assets/images/01.jpg",
-      durationMs: 40000
-    },
-    {
-      pageLabel: "鏃呯▼",
-      title: "婕暱鏃呯▼",
-      text: "涓轰簡杩欏満娴佹氮锛屼汉绫诲€惧敖鎵€鏈夛紝閫犱簡涓€涓囦袱鍗冨彴琛屾槦鍙戝姩鏈猴紝鏈€楂樼殑鏈変竴涓囦竴鍗冪背锛屾瘮鐝犵﹩鏈楃帥宄拌繕楂橈紒\n\n鏁翠釜璁″垝瑕佷袱鍗冧簲鐧惧勾锛屾暣鏁翠竴鐧句唬浜猴紝鍒嗕簲涓樁娈靛畬鎴愶細\n棣栧厛锛屽厛璁╁湴鐞冨仠姝㈣嚜杞紱鐒跺悗锛屽€熷姪澶槼鍜屾湪鏄熺殑鍔涢噺锛屾妸鍦扮悆鎺ㄧ澶槼绯伙紱鎺ョ潃鍦ㄥ澶┖鍔犻€熻嚦鍏夐€熺殑鍗冨垎涔嬩簲锛涗箣鍚庡噺閫燂紱鏈€鍚庤鍦扮悆鍦ㄦ柊鐨勫鍥畨瀹躲€?,
-      speechText: "涓轰簡杩欏満娴佹氮锛屼汉绫诲€惧敖鎵€鏈夛紝閫犱簡涓€涓囦袱鍗冨彴琛屾槦鍙戝姩鏈猴紝鏈€楂樼殑鏈変竴涓囦竴鍗冪背锛屾瘮鐝犵﹩鏈楃帥宄拌繕楂橈紒鏁翠釜璁″垝瑕佷袱鍗冧簲鐧惧勾锛屾暣鏁翠竴鐧句唬浜猴紝鍒嗕簲涓樁娈靛畬鎴愶細棣栧厛锛屽厛璁╁湴鐞冨仠姝㈣嚜杞紱鐒跺悗锛屽€熷姪澶槼鍜屾湪鏄熺殑鍔涢噺锛屾妸鍦扮悆鎺ㄧ澶槼绯伙紱鎺ョ潃鍦ㄥ澶┖鍔犻€熻嚦鍏夐€熺殑鍗冨垎涔嬩簲锛涗箣鍚庡噺閫燂紱鏈€鍚庤鍦扮悆鍦ㄦ柊鐨勫鍥畨瀹躲€?,
-      video: "./assets/video/planet-engine-correct-front-55s-stable.mp4",
-      ratio: 0.22,
-      image: "./assets/images/02.jpg",
-      durationMs: 36000
-    },
-    {
-      pageLabel: "涓栫晫",
-      title: "鍦颁笅鍩?,
-      text: "鍦扮悆鍋滆浆鍚庯紝涓栫晫鍏ㄥ彉浜嗘牱锛氬厛鏄暱杈炬暟骞寸殑楂樻俯鍜岄吀闆紝闅忕潃鍦扮悆绂诲お闃宠秺鏉ヨ秺杩滐紝娓╁害鏋侀€熶笅闄嶏紝澶ф捣鍐绘垚浜嗗啺鍘燂紝鍩庡競琚啺闆煁璧锋潵锛屼汉绫诲彧鑳戒綇杩涘湴涓嬪煄銆俓n\n閭ｆ椂鍊欑殑瀛︽牎锛屽彧閲嶇偣鏁欐暟瀛︺€佺瀛︼紝鑹烘湳鍜屽摬瀛﹂兘寰堝皯瀛︼紝鍥犱负澶у鏈€鍏冲績鐨勶紝鍙湁澶槼瀹変笉瀹夊叏銆佸湴鐞冭蛋鍒板摢浜嗐€俓n\n鏈変竴鍫傚摬瀛﹁锛岃€佸笀鍑轰簡涓€涓皽璇細\n鈥滀綘鍦ㄥ钩鍘熶笂璧扮潃璧扮潃锛岀獊鐒堕亣鍒颁竴鍫靛锛岃繖澧欙紝鍚戜笂鏃犻檺楂橈紝鍚戜笅鏃犻檺娣憋紝鍚戝乏鏃犻檺杩滐紝鍚戝彸閮芥棤闄愯繙锛岃繖澧欐槸浠€涔堬紵鈥漒n\n绛旀鏄浜°€俓n\n鍦ㄩ偅涓椂浠ｏ紝姝讳骸绂绘瘡涓汉閮藉緢杩戯紝鍍忓奖瀛愪竴鏍疯窡鐫€澶у銆?,
-      speechText: "鍦扮悆鍋滆浆鍚庯紝涓栫晫鍏ㄥ彉浜嗘牱锛氬厛鏄暱杈炬暟骞寸殑楂樻俯鍜岄吀闆紝闅忕潃鍦扮悆绂诲お闃宠秺鏉ヨ秺杩滐紝娓╁害鏋侀€熶笅闄嶏紝澶ф捣鍐绘垚浜嗗啺鍘燂紝鍩庡競琚啺闆煁璧锋潵锛屼汉绫诲彧鑳戒綇杩涘湴涓嬪煄銆傞偅鏃跺€欑殑瀛︽牎锛屽彧閲嶇偣鏁欐暟瀛︺€佺瀛︼紝鑹烘湳鍜屽摬瀛﹂兘寰堝皯瀛︼紝鍥犱负澶у鏈€鍏冲績鐨勶紝鍙湁澶槼瀹変笉瀹夊叏銆佸湴鐞冭蛋鍒板摢浜嗐€傛湁涓€鍫傚摬瀛﹁锛岃€佸笀鍑轰簡涓€涓皽璇細浣犲湪骞冲師涓婅蛋鐫€璧扮潃锛岀獊鐒堕亣鍒颁竴鍫靛锛岃繖澧欙紝鍚戜笂鏃犻檺楂橈紝鍚戜笅鏃犻檺娣憋紝鍚戝乏鏃犻檺杩滐紝鍚戝彸閮芥棤闄愯繙锛岃繖澧欐槸浠€涔堬紵绛旀鏄浜°€傚湪閭ｄ釜鏃朵唬锛屾浜＄姣忎釜浜洪兘寰堣繎锛屽儚褰卞瓙涓€鏍疯窡鐫€澶у銆?,
-      video: "./assets/video/BV1x9rfB1Eg8-0411-0451-fullhd.mp4",
-      image: "./assets/images/06.jpg",
-      durationMs: 42000
-    },
-    {
-      pageLabel: "杞姌",
-      title: "鎬€鐤戜笌鍙嶅彌",
-      text: "鍙堣繃浜嗗嚑骞达紝璺濈绉戝瀹舵帹绠楃殑鏃堕棿宸茬粡宸笉澶氬埌浜嗭紝澶槼鍗寸湅璧锋潵涓€鐐瑰彉鍖栭兘娌℃湁锛屾棦娌＄垎鐐镐篃娌¤啫鑳€銆俓n\n姣斿瘨鍐锋洿鍙€曠殑锛屾槸浜哄績鐨勫姩鎽囥€傝秺鏉ヨ秺澶氱殑浜烘€€鐤戯細娴佹氮鍦扮悆璁″垝锛屾槸涓嶆槸涓€涓交澶村交灏剧殑楠楀眬锛焅n\n娴佽█鍍忛噹鐏竴鏍疯秺鐑ц秺鏃猴紝浜轰滑缁勬垚浜嗗弽鍙涘啗锛屾敾杩涗簡鍦扮悆椹鹃┒瀹わ紝鎶撲綇浜嗘渶鍚庝簲鍗冨鍚嶅潥鎸佽鍒掔殑绉戝瀹跺拰鑱斿悎鏀垮簻鐨勪汉銆?,
-      speechText: "鍙堣繃浜嗗嚑骞达紝璺濈绉戝瀹舵帹绠楃殑鏃堕棿宸茬粡宸笉澶氬埌浜嗭紝澶槼鍗寸湅璧锋潵涓€鐐瑰彉鍖栭兘娌℃湁锛屾棦娌＄垎鐐镐篃娌¤啫鑳€銆傛瘮瀵掑喎鏇村彲鎬曠殑锛屾槸浜哄績鐨勫姩鎽囥€傝秺鏉ヨ秺澶氱殑浜烘€€鐤戯細娴佹氮鍦扮悆璁″垝锛屾槸涓嶆槸涓€涓交澶村交灏剧殑楠楀眬锛熸祦瑷€鍍忛噹鐏竴鏍疯秺鐑ц秺鏃猴紝浜轰滑缁勬垚浜嗗弽鍙涘啗锛屾敾杩涗簡鍦扮悆椹鹃┒瀹わ紝鎶撲綇浜嗘渶鍚庝簲鍗冨鍚嶅潥鎸佽鍒掔殑绉戝瀹跺拰鑱斿悎鏀垮簻鐨勪汉銆?,
-      video: "./assets/video/bg.mp4",
-      ratio: 0.36,
-      image: "./assets/images/11.jpg",
-      durationMs: 32000
-    },
-    {
-      pageLabel: "鍐茬獊",
-      title: "澶勫垜涓庨仐瑷€",
-      text: "鍙嶅彌鍐涙妸浠栦滑鎶煎埌鍐板皝鐨勬捣闈笂锛岀敤鐗瑰埆娈嬮叿鐨勬柟寮忔墽琛屾鍒戯細鏀惰蛋浠栦滑闃叉姢鏈嶉噷鐨勫姞鐑數姹狅紝鍦ㄩ浂涓嬩竴鐧惧害鐨勪綆娓╅噷锛岃浠栦滑鎱㈡參鍙樻垚鍐伴洉銆俓n\n杩欐椂鍊欙紝鑱斿悎鏀垮簻鐨勬墽鏀垮畼璇村嚭浜嗘渶鍚庣殑璇濓細\n鈥滄垜浠湰鍙互鎴樻枟鍒板簳锛屼絾閭ｆ牱浼氳鍙戝姩鏈哄け鎺э紝鐑х┛鍦扮悆銆佽捀鍙戞捣娲嬶紝鎵€浠ユ垜浠€夋嫨鎶曢檷銆傗€漒n\n浠栬繕璇达細\n鈥滄案杩滀繚鎸佺悊鏅猴紝瀵逛簬浜虹被鏉ヨ锛岀湡鐨勫お闅句簡銆備絾杩欓噷鐨勪簲鍗冨浜猴紝鎶婁俊蹇靛潥鎸佸埌浜嗘渶鍚庛€傛垜浠湅涓嶅埌鐪熺浉鐨勯偅涓€澶╋紝浣嗗鏋滀汉绫昏兘涓€鐩村欢缁竾浠ｏ紝鏈潵鐨勪汉浼氬湪鎴戜滑澧撳墠娴佷笅鐪兼唱锛岃繖棰楀悕鍙湴鐞冪殑鏄熺悆锛屽氨鏄垜浠案鎭掔殑绾康纰戯紒鈥?,
-      speechText: "鍙嶅彌鍐涙妸浠栦滑鎶煎埌鍐板皝鐨勬捣闈笂锛岀敤鐗瑰埆娈嬮叿鐨勬柟寮忔墽琛屾鍒戯細鏀惰蛋浠栦滑闃叉姢鏈嶉噷鐨勫姞鐑數姹狅紝鍦ㄩ浂涓嬩竴鐧惧害鐨勪綆娓╅噷锛岃浠栦滑鎱㈡參鍙樻垚鍐伴洉銆傝繖鏃跺€欙紝鑱斿悎鏀垮簻鐨勬墽鏀垮畼璇村嚭浜嗘渶鍚庣殑璇濓細鎴戜滑鏈彲浠ユ垬鏂楀埌搴曪紝浣嗛偅鏍蜂細璁╁彂鍔ㄦ満澶辨帶锛岀儳绌垮湴鐞冦€佽捀鍙戞捣娲嬶紝鎵€浠ユ垜浠€夋嫨鎶曢檷銆備粬杩樿锛氭案杩滀繚鎸佺悊鏅猴紝瀵逛簬浜虹被鏉ヨ锛岀湡鐨勫お闅句簡銆備絾杩欓噷鐨勪簲鍗冨浜猴紝鎶婁俊蹇靛潥鎸佸埌浜嗘渶鍚庛€傛垜浠湅涓嶅埌鐪熺浉鐨勯偅涓€澶╋紝浣嗗鏋滀汉绫昏兘涓€鐩村欢缁竾浠ｏ紝鏈潵鐨勪汉浼氬湪鎴戜滑澧撳墠娴佷笅鐪兼唱锛岃繖棰楀悕鍙湴鐞冪殑鏄熺悆锛屽氨鏄垜浠案鎭掔殑绾康纰戯紒",
-      video: "./assets/video/helium-flash-part-a.mp4",
-      ratio: 0,
-      image: "./assets/images/09.jpg",
-      durationMs: 42000
-    },
-    {
-      pageLabel: "楂樻疆",
-      title: "澶槼姘﹂棯",
-      text: "娴峰哺涓婄殑浜轰滑杩樺湪搴嗙鑳滃埄鐨勬椂鍊欙紝澶槼鐨勪綅缃獊鐒剁垎鍙戝嚭涓€闃靛己鍏夛紝鎺ョ潃鏆楃孩鑹茬殑鐞冧綋鎱㈡參鑶ㄨ儉锛屾按鏄熴€侀噾鏄熴€佺伀鏄燂紝涓€涓帴鐫€涓€涓鍚炴病鈥斺€斿お闃虫唉闂湡鐨勭垎鍙戜簡锛乗n\n宀镐笂鐨勫崄鍑犱竾浜洪兘鍛嗕綇浜嗭紝澶у缁堜簬鏄庣櫧锛岄偅浜涜鍐绘鐨勪汉锛屾墠鏄渶娓呴啋鐨勪汉銆?,
-      speechText: "娴峰哺涓婄殑浜轰滑杩樺湪搴嗙鑳滃埄鐨勬椂鍊欙紝澶槼鐨勪綅缃獊鐒剁垎鍙戝嚭涓€闃靛己鍏夛紝鎺ョ潃鏆楃孩鑹茬殑鐞冧綋鎱㈡參鑶ㄨ儉锛屾按鏄熴€侀噾鏄熴€佺伀鏄燂紝涓€涓帴鐫€涓€涓鍚炴病鈥斺€斿お闃虫唉闂湡鐨勭垎鍙戜簡锛佸哺涓婄殑鍗佸嚑涓囦汉閮藉憜浣忎簡锛屽ぇ瀹剁粓浜庢槑鐧斤紝閭ｄ簺琚喕姝荤殑浜猴紝鎵嶆槸鏈€娓呴啋鐨勪汉銆?,
-      video: "./assets/video/helium-flash-part-b.mp4",
-      ratio: 0,
-      image: "./assets/images/12.jpg",
-      durationMs: 32000
-    },
-    {
-      pageLabel: "涓婚",
-      title: "楂樿吹鐨勪汉",
-      text: "涔﹂噷鏈変竴鍙ヨ瘽鎴戠壒鍒枩娆細\n鈥滄垜浠繀椤绘姳鏈夊笇鏈涳紝杩欏苟涓嶆槸鍥犱负甯屾湜鐪熺殑瀛樺湪锛岃€屾槸鍥犱负鎴戜滑瑕佸仛楂樿吹鐨勪汉銆傗€漒n\n浠ュ墠鎴戣寰楋紝楂樿吹鍙兘鍜屾湁閽便€佹湁鍦颁綅鏈夊叧锛屼絾璇讳簡杩欐湰涔︽垜鎵嶇煡閬擄紝鐪熸鐨勯珮璐碉紝鏄氨绠楁墍鏈変汉璇В浣犮€佹仺浣狅紝浣犱篃涓嶆斁寮冩纭殑鍒ゆ柇锛涙槸鏄庢槑鐭ラ亾鍓嶈矾鑹伴毦锛岃繕鎰挎剰涓烘洿澶氫汉瀹堟姢鏈潵銆俓n\n閭ｄ簺鍧氬畧鐨勭瀛﹀鍜屽伐浣滀汉鍛橈紝灏辨槸杩欐牱楂樿吹鐨勪汉銆?,
-      speechText: "涔﹂噷鏈変竴鍙ヨ瘽鎴戠壒鍒枩娆細鎴戜滑蹇呴』鎶辨湁甯屾湜锛岃繖骞朵笉鏄洜涓哄笇鏈涚湡鐨勫瓨鍦紝鑰屾槸鍥犱负鎴戜滑瑕佸仛楂樿吹鐨勪汉銆備互鍓嶆垜瑙夊緱锛岄珮璐靛彲鑳藉拰鏈夐挶銆佹湁鍦颁綅鏈夊叧锛屼絾璇讳簡杩欐湰涔︽垜鎵嶇煡閬擄紝鐪熸鐨勯珮璐碉紝鏄氨绠楁墍鏈変汉璇В浣犮€佹仺浣狅紝浣犱篃涓嶆斁寮冩纭殑鍒ゆ柇锛涙槸鏄庢槑鐭ラ亾鍓嶈矾鑹伴毦锛岃繕鎰挎剰涓烘洿澶氫汉瀹堟姢鏈潵銆傞偅浜涘潥瀹堢殑绉戝瀹跺拰宸ヤ綔浜哄憳锛屽氨鏄繖鏍烽珮璐电殑浜恒€?,
-      image: "./assets/images/04.jpg",
-      durationMs: 30000
-    },
-    {
-      pageLabel: "涓婚",
-      title: "涓ょ甯屾湜",
-      text: "鍚屾椂锛屻€婃祦娴湴鐞冦€嬭鎴戞槑鐧斤紝甯屾湜涔熸湁涓ょ銆俓n\n鍙嶅彌鍐涘甫鍦扮悆鍥炲埌娓╂殩鐨勫お闃宠韩杈圭殑甯屾湜锛屽叾瀹炰笉鏄湡姝ｇ殑甯屾湜锛岃€屾槸涓€绉嶅亣鐨勫畨鎱般€俓n\n鐪熸鐨勫笇鏈涳紝涓嶆槸闂潃鐪肩潧璇粹€滀竴鍒囬兘浼氬ソ璧锋潵鈥濄€俓n\n鐪熸鐨勫笇鏈涳紝鏄槑鏄庣煡閬撳墠鏂瑰彲鑳芥槸缁濊矾锛屼緷鐒堕€夋嫨璧颁笅鍘伙紱鏄槑鏄庣煡閬撲細琚瑙ｃ€佷細浠樺嚭浠ｄ环锛屼緷鐒堕€夋嫨鍧氬畧銆俓n\n娌℃湁鐜板疄鏀拺鐨勫笇鏈涙槸姣掕嵂銆? \n鑰屾暍浜庣洿闈㈢粷鏈涚殑甯屾湜锛屾墠鏄枃鏄庣殑鐏銆?,
-      speechText: "鍚屾椂锛屻€婃祦娴湴鐞冦€嬭鎴戞槑鐧斤紝甯屾湜涔熸湁涓ょ銆傚弽鍙涘啗甯﹀湴鐞冨洖鍒版俯鏆栫殑澶槼韬竟鐨勫笇鏈涳紝鍏跺疄涓嶆槸鐪熸鐨勫笇鏈涳紝鑰屾槸涓€绉嶅亣鐨勫畨鎱般€傜湡姝ｇ殑甯屾湜锛屼笉鏄棴鐫€鐪肩潧璇翠竴鍒囬兘浼氬ソ璧锋潵銆傜湡姝ｇ殑甯屾湜锛屾槸鏄庢槑鐭ラ亾鍓嶆柟鍙兘鏄粷璺紝渚濈劧閫夋嫨璧颁笅鍘伙紱鏄槑鏄庣煡閬撲細琚瑙ｃ€佷細浠樺嚭浠ｄ环锛屼緷鐒堕€夋嫨鍧氬畧銆傛病鏈夌幇瀹炴敮鎾戠殑甯屾湜鏄瘨鑽€傝€屾暍浜庣洿闈㈢粷鏈涚殑甯屾湜锛屾墠鏄枃鏄庣殑鐏銆?,
-      durationMs: 36000
-    },
-    {
-      pageLabel: "缁撳熬",
-      title: "缁撳熬",
-      text: "鍦ㄦ渶榛戞殫銆佹渶鍥伴毦鐨勬椂鍊欙紝浜虹被鏈€涓嶈兘澶卞幓鐨勶紝灏辨槸鐞嗘€с€佷俊蹇靛拰甯屾湜銆俓n\n灏卞儚鐢靛奖閲岃鐨勶細\n鈥滄棤璁烘渶缁堢粨鏋滃皢浜虹被鍘嗗彶瀵煎悜浣曞锛屾垜浠喅瀹氾紝閫夋嫨甯屾湜銆傗€漒n\n鎴戠浉淇★紝灏辩畻鐪熺殑閬囧埌缁濆锛屽彧瑕佹垜浠笉鏀惧純锛屾€绘湁涓€澶╋紝鎴戜滑涓€瀹氳兘鍐嶆鐪嬪埌钃濆ぉ锛岀湅鍒伴矞鑺遍噸鏂版寕婊℃灊澶淬€俓n\n鎰熻阿鍒樻厛娆ｇ埛鐖凤紝鍐欎笅杩欐牱涓€閮ㄦ棦鍐峰郴鍙堝厖婊″笇鏈涚殑浣滃搧锛岃鎴戜滑鐪嬪埌浜虹被鐨勫媷鏁㈠拰鍧氬畧銆俓n\n鎴戠殑鍒嗕韩鍒版缁撴潫锛岃阿璋㈠ぇ瀹讹紒",
-      speechText: "鍦ㄦ渶榛戞殫銆佹渶鍥伴毦鐨勬椂鍊欙紝浜虹被鏈€涓嶈兘澶卞幓鐨勶紝灏辨槸鐞嗘€с€佷俊蹇靛拰甯屾湜銆傚氨鍍忕數褰遍噷璇寸殑锛氭棤璁烘渶缁堢粨鏋滃皢浜虹被鍘嗗彶瀵煎悜浣曞锛屾垜浠喅瀹氾紝閫夋嫨甯屾湜銆傛垜鐩镐俊锛屽氨绠楃湡鐨勯亣鍒扮粷澧冿紝鍙鎴戜滑涓嶆斁寮冿紝鎬绘湁涓€澶╋紝鎴戜滑涓€瀹氳兘鍐嶆鐪嬪埌钃濆ぉ锛岀湅鍒伴矞鑺遍噸鏂版寕婊℃灊澶淬€傛劅璋㈠垬鎱堟鐖风埛锛屽啓涓嬭繖鏍蜂竴閮ㄦ棦鍐峰郴鍙堝厖婊″笇鏈涚殑浣滃搧锛岃鎴戜滑鐪嬪埌浜虹被鐨勫媷鏁㈠拰鍧氬畧銆傛垜鐨勫垎浜埌姝ょ粨鏉燂紝璋㈣阿澶у锛?,
-      video: "./assets/video/ending-recall-first5s.mp4",
-      durationMs: 26000
-    }
-  ];
+  {
+    "pageLabel": "封面",
+    "title": "《流浪地球》读书分享",
+    "text": "宁津县第二实验小学 三年级六班\n崔护\n2026年4月",
+    "speechText": "宁津县第二实验小学 三年级六班\n崔护\n2026年4月",
+    "video": "./assets/video/liulang2-home-2304-2315-slow.mp4",
+    "ratio": 0,
+    "image": "./assets/images/01.jpg",
+    "durationMs": 14000
+  },
+  {
+    "pageLabel": "开场",
+    "title": "开场",
+    "text": "尊敬的老师、亲爱的同学们：\n\n大家好！今天我想和大家分享刘慈欣爷爷的经典科幻作品《流浪地球》，这是一个关于地球和人类，在绝境中寻找希望的故事。\n\n开篇第一句话就让我印象特别深：\n\n“我没见过黑夜，我没见过星星，我没见过春天、秋天和冬天。”\n\n故事里的主人公，一出生地球就停止自转了，而这一切的根源，都是我们的太阳。\n\n三个多世纪以前，科学家发现，太阳 400 年内会发生氦闪，膨胀成红巨星，把地球彻底吞噬。\n\n有人说：\n\n“人类在宇宙间离开了地球，就像婴儿在沙漠里离开了母亲。”\n\n于是人类做了一个无比勇敢的决定：给地球装上发动机，带着我们 46 亿年的家，一起去宇宙流浪！",
+    "speechText": "尊敬的老师、亲爱的同学们：\n\n大家好！今天我想和大家分享刘慈欣爷爷的经典科幻作品《流浪地球》，这是一个关于地球和人类，在绝境中寻找希望的故事。\n\n开篇第一句话就让我印象特别深：\n\n“我没见过黑夜，我没见过星星，我没见过春天、秋天和冬天。”\n\n故事里的主人公，一出生地球就停止自转了，而这一切的根源，都是我们的太阳。\n\n三个多世纪以前，科学家发现，太阳 400 年内会发生氦闪，膨胀成红巨星，把地球彻底吞噬。\n\n有人说：\n\n“人类在宇宙间离开了地球，就像婴儿在沙漠里离开了母亲。”\n\n于是人类做了一个无比勇敢的决定：给地球装上发动机，带着我们 46 亿年的家，一起去宇宙流浪！",
+    "video": "./assets/video/solar-aging-near-sun-612-717.mp4",
+    "ratio": 0,
+    "image": "./assets/images/01.jpg",
+    "durationMs": 42000
+  },
+  {
+    "pageLabel": "旅程",
+    "title": "漫长旅程",
+    "text": "为了这场流浪，人类倾尽所有，造了一万两千台行星发动机，最高的有一万一千米，比珠穆朗玛峰还高！\n\n整个计划要 2500 年，整整一百代人，分五个阶段完成：\n\n首先，先让地球停止自转；\n\n然后，借助太阳和木星的力量，把地球摔推离太阳系；\n\n接着，在外太空加速至光速的千分之五；\n\n之后减速；\n\n最后，让地球在新的家园安家。",
+    "speechText": "为了这场流浪，人类倾尽所有，造了一万两千台行星发动机，最高的有一万一千米，比珠穆朗玛峰还高！\n\n整个计划要 2500 年，整整一百代人，分五个阶段完成：\n\n首先，先让地球停止自转；\n\n然后，借助太阳和木星的力量，把地球摔推离太阳系；\n\n接着，在外太空加速至光速的千分之五；\n\n之后减速；\n\n最后，让地球在新的家园安家。",
+    "video": "./assets/video/planet-engine-correct-front-55s-stable.mp4",
+    "ratio": 0.22,
+    "image": "./assets/images/02.jpg",
+    "durationMs": 36000
+  },
+  {
+    "pageLabel": "世界",
+    "title": "地下城",
+    "text": "地球停转后，世界全变了样：\n\n先是长达数年的高温和酸雨，随着地球离太阳越来越远，温度极速下降，大海冻成了冰原，城市被冰雪埋起来，人类只能住进地下城。\n\n那时候的学校，只重点教数学、科学，艺术和哲学都很少学，因为大家最关心的，只有太阳安不安全、地球走到哪了。\n\n有一堂哲学课，老师出了一个谜语：\n\n“你在平原上走着走着，突然遇到一堵墙，这墙，向上无限高，向下无限深，向左无限远，向右都无限远，这墙是什么？”\n\n答案是死亡。\n\n在那个时代，死亡离每个人都很近，像影子一样跟着大家。",
+    "speechText": "地球停转后，世界全变了样：\n\n先是长达数年的高温和酸雨，随着地球离太阳越来越远，温度极速下降，大海冻成了冰原，城市被冰雪埋起来，人类只能住进地下城。\n\n那时候的学校，只重点教数学、科学，艺术和哲学都很少学，因为大家最关心的，只有太阳安不安全、地球走到哪了。\n\n有一堂哲学课，老师出了一个谜语：\n\n“你在平原上走着走着，突然遇到一堵墙，这墙，向上无限高，向下无限深，向左无限远，向右都无限远，这墙是什么？”\n\n答案是死亡。\n\n在那个时代，死亡离每个人都很近，像影子一样跟着大家。",
+    "video": "./assets/video/BV1x9rfB1Eg8-0411-0451-fullhd.mp4",
+    "image": "./assets/images/06.jpg",
+    "durationMs": 42000
+  },
+  {
+    "pageLabel": "转折",
+    "title": "怀疑与反叛",
+    "text": "又过了几年，距离科学家推算的时间已经差不多到了，太阳却看起来一点变化都没有，既没爆炸也没膨胀。\n\n比寒冷更可怕的，是人心的动摇。\n\n越来越多的人怀疑：流浪地球计划，是不是一个彻头彻尾的骗局？\n\n流言像野火一样越烧越旺，人们组成了反叛军，攻进了地球驾驶室，抓住了最后五千多名坚持计划的科学家和联合政府的人。",
+    "speechText": "又过了几年，距离科学家推算的时间已经差不多到了，太阳却看起来一点变化都没有，既没爆炸也没膨胀。\n\n比寒冷更可怕的，是人心的动摇。\n\n越来越多的人怀疑：流浪地球计划，是不是一个彻头彻尾的骗局？\n\n流言像野火一样越烧越旺，人们组成了反叛军，攻进了地球驾驶室，抓住了最后五千多名坚持计划的科学家和联合政府的人。",
+    "video": "./assets/video/bg.mp4",
+    "ratio": 0.36,
+    "image": "./assets/images/11.jpg",
+    "durationMs": 32000
+  },
+  {
+    "pageLabel": "冲突",
+    "title": "处刑与遗言",
+    "text": "反叛军把他们押到冰封的海面上，用特别残酷的方式执行死刑：收走他们防护服里的加热电池，在零下一百度的低温里，让他们慢慢变成冰雕。\n\n这时候，联合政府的执政官说出了最后的话：\n\n“我们本可以战斗到底，但那样会让发动机失控，烧穿地球、蒸发海洋，所以我们选择投降。”\n\n他还说：\n\n“永远保持理智，对于人类来说，真的太难了。但这里的五千多人，把信念坚持到了最后。我们看不到真相的那一天，但如果人类能一直延续万代，未来的人会在我们墓前流下眼泪，这颗名叫地球的星球，就是我们永恒的纪念碑！”",
+    "speechText": "反叛军把他们押到冰封的海面上，用特别残酷的方式执行死刑：收走他们防护服里的加热电池，在零下一百度的低温里，让他们慢慢变成冰雕。\n\n这时候，联合政府的执政官说出了最后的话：\n\n“我们本可以战斗到底，但那样会让发动机失控，烧穿地球、蒸发海洋，所以我们选择投降。”\n\n他还说：\n\n“永远保持理智，对于人类来说，真的太难了。但这里的五千多人，把信念坚持到了最后。我们看不到真相的那一天，但如果人类能一直延续万代，未来的人会在我们墓前流下眼泪，这颗名叫地球的星球，就是我们永恒的纪念碑！”",
+    "video": "./assets/video/helium-flash-part-a.mp4",
+    "ratio": 0,
+    "image": "./assets/images/09.jpg",
+    "durationMs": 42000
+  },
+  {
+    "pageLabel": "高潮",
+    "title": "太阳氦闪",
+    "text": "海岸上的人们还在庆祝胜利的时候，太阳的位置突然爆发出一阵强光，接着暗红色的球体慢慢膨胀，水星、金星、火星，一个接着一个被吞没。\n\n太阳氦闪真的爆发了！\n\n岸上的十几万人都呆住了，大家终于明白，那些被冻死的人，才是最清醒的人。",
+    "speechText": "海岸上的人们还在庆祝胜利的时候，太阳的位置突然爆发出一阵强光，接着暗红色的球体慢慢膨胀，水星、金星、火星，一个接着一个被吞没。\n\n太阳氦闪真的爆发了！\n\n岸上的十几万人都呆住了，大家终于明白，那些被冻死的人，才是最清醒的人。",
+    "video": "./assets/video/helium-flash-part-b.mp4",
+    "ratio": 0,
+    "image": "./assets/images/12.jpg",
+    "durationMs": 32000
+  },
+  {
+    "pageLabel": "主题",
+    "title": "高贵的人",
+    "text": "书里有一句话我特别喜欢：\n\n“我们必须抱有希望，这并不是因为希望真的存在，而是因为我们要做高贵的人。”\n\n以前我觉得，高贵可能和有钱、有地位有关，但读了这本书我才知道，真正的高贵，是就算所有人误解你、恨你，你也不放弃正确的判断；是明明知道前路艰难，还愿意为更多人守护未来。\n\n那些坚守的科学家和工作人员，就是这样高贵的人。",
+    "speechText": "书里有一句话我特别喜欢：\n\n“我们必须抱有希望，这并不是因为希望真的存在，而是因为我们要做高贵的人。”\n\n以前我觉得，高贵可能和有钱、有地位有关，但读了这本书我才知道，真正的高贵，是就算所有人误解你、恨你，你也不放弃正确的判断；是明明知道前路艰难，还愿意为更多人守护未来。\n\n那些坚守的科学家和工作人员，就是这样高贵的人。",
+    "image": "./assets/images/04.jpg",
+    "durationMs": 30000
+  },
+  {
+    "pageLabel": "主题",
+    "title": "两种希望",
+    "text": "同时，《流浪地球》让我明白，希望也有两种。\n\n反叛军带地球回到温暖的太阳身边的希望，其实不是真正的希望，而是一种假的安慰。\n\n真正的希望，不是闭着眼睛说“一切都会好起来”。\n\n真正的希望，是明明知道前方可能是绝路，依然选择走下去；\n\n是明明知道会被误解、会付出代价，依然选择坚守。\n\n没有现实支撑的希望是毒药。而敢于直面绝望的希望，才是文明的火种。",
+    "speechText": "同时，《流浪地球》让我明白，希望也有两种。\n\n反叛军带地球回到温暖的太阳身边的希望，其实不是真正的希望，而是一种假的安慰。\n\n真正的希望，不是闭着眼睛说“一切都会好起来”。\n\n真正的希望，是明明知道前方可能是绝路，依然选择走下去；\n\n是明明知道会被误解、会付出代价，依然选择坚守。\n\n没有现实支撑的希望是毒药。而敢于直面绝望的希望，才是文明的火种。",
+    "image": "./assets/images/proxima-centauri-nasa.jpg",
+    "durationMs": 36000
+  },
+  {
+    "pageLabel": "结尾",
+    "title": "致谢",
+    "text": "在最黑暗、最困难的时候，人类最不能失去的，就是理性、信念和希望。\n\n就像电影里说的：\n\n“无论最终结果将人类历史导向何处，我们决定，选择希望。”\n\n我相信，就算真的遇到绝境，只要我们不放弃，总有一天，我们一定能再次看到蓝天，看到鲜花重新挂满枝头。\n\n感谢刘慈欣爷爷，写下这样一部既冷峻又充满希望的作品，让我们看到人类的勇敢和坚守。\n\n我的分享到此结束，谢谢大家！",
+    "speechText": "在最黑暗、最困难的时候，人类最不能失去的，就是理性、信念和希望。\n\n就像电影里说的：\n\n“无论最终结果将人类历史导向何处，我们决定，选择希望。”\n\n我相信，就算真的遇到绝境，只要我们不放弃，总有一天，我们一定能再次看到蓝天，看到鲜花重新挂满枝头。\n\n感谢刘慈欣爷爷，写下这样一部既冷峻又充满希望的作品，让我们看到人类的勇敢和坚守。\n\n我的分享到此结束，谢谢大家！",
+    "video": "./assets/video/ending-recall-first5s.mp4",
+    "durationMs": 26000
+  }
+];
 
     const audienceTexts = [
       "",
-      "鈥滄垜娌¤杩囬粦澶滐紝鎴戞病瑙佽繃鏄熸槦锛屾垜娌¤杩囨槬澶┿€佺澶╁拰鍐ぉ銆傗€漒n\n澶槼鍗冲皢鍦ㄥ洓鐧惧勾鍐呭彂鐢熸唉闂紝浜虹被鍐冲畾甯︾潃鍦扮悆涓€璧蜂笂璺€?,
-      "涓€涓囦袱鍗冨彴琛屾槦鍙戝姩鏈猴紝浜斾釜闃舵锛屼袱鍗冧簲鐧惧勾銆俓n\n浠婂ぉ鍑哄彂鐨勪汉锛岀湅涓嶅埌缁堢偣銆?,
-      "澶ф捣鍐荤粨锛屽煄甯傛矇娌★紝浜虹被鍙兘浣忚繘鍦颁笅鍩庛€俓n\n杩欎釜鏃朵唬锛屾浜″儚褰卞瓙涓€鏍凤紝鏃舵椂鍒诲埢璺熷湪浜虹被韬竟銆?,
-      "浜旂櫨骞磋繃鍘伙紝澶槼鐪嬭捣鏉ヨ繕鏄€佹牱瀛愩€俓n\n浜庢槸锛屼汉绫诲紑濮嬫€€鐤戙€佸紑濮嬪垎瑁傦紝鍙嶅彌鍐涘嚭鐜颁簡銆?,
-      "浜斿崈澶氬悕绉戝瀹跺拰鑱斿悎鏀垮簻鎴愬憳锛岃鎶间笂鍐板師銆俓n\n浠栦滑娌℃湁閫€缂╋紝鎶婁俊蹇靛潥鎸佸埌浜嗘渶鍚庛€?,
-      "宀镐笂鐨勪汉杩樺湪搴嗙銆俓n\n灏卞湪姝ゆ椂锛屽お闃虫唉闂垎鍙戜簡銆俓n\n浜轰滑缁堜簬鏄庣櫧锛氶偅浜涜鍐绘鐨勪汉锛屾墠鏄湡姝ｆ竻閱掔殑浜恒€?,
-      "浠€涔堝彨楂樿吹鐨勪汉锛焅n\n鏄湪鎵€鏈変汉閮借瑙ｄ綘鏃讹紝渚濈劧涓嶆斁寮冭嚜宸辩殑鍒ゆ柇锛沑n鏄湪缁撴灉娈嬮叿鏃讹紝渚濈劧鎰挎剰涓烘洿澶氫汉瀹堜綇鏈潵銆?,
-      "銆婃祦娴湴鐞冦€嬭鎴戞槑鐧斤紝甯屾湜涔熸湁涓ょ銆俓n\n娌℃湁鐜板疄鏀拺鐨勫笇鏈涙槸姣掕嵂銆俓n鑰屾暍浜庣洿闈㈢粷鏈涚殑甯屾湜锛屾墠鏄枃鏄庣殑鐏銆?,
-      "鍦ㄦ渶榛戞殫鐨勬椂鍊欙紝\n浜虹被鏈€涓嶈兘澶卞幓鐨勶紝\n灏辨槸鐞嗘€с€佷俊蹇靛拰甯屾湜銆俓n\n璋㈣阿澶у锛?
+      "“我没见过黑夜，我没见过星星，我没见过春天、秋天和冬天。”\n\n太阳即将在四百年内发生氦闪，人类决定带着地球一起上路。",
+      "一万两千台行星发动机，五个阶段，两千五百年。\n\n今天出发的人，看不到终点。",
+      "大海冻结，城市沉没，人类只能住进地下城。\n\n这个时代，死亡像影子一样，时时刻刻跟在人类身边。",
+      "五百年过去，太阳看起来还是老样子。\n\n于是，人类开始怀疑、开始分裂，反叛军出现了。",
+      "五千多名科学家和联合政府成员，被押上冰原。\n\n他们没有退缩，把信念坚持到了最后。",
+      "岸上的人还在庆祝。\n\n就在此时，太阳氦闪爆发了。\n\n人们终于明白：那些被冻死的人，才是真正清醒的人。",
+      "什么叫高贵的人？\n\n是在所有人都误解你时，依然不放弃自己的判断；\n是在结果残酷时，依然愿意为更多人守住未来。",
+      "《流浪地球》让我明白，希望也有两种。\n\n没有现实支撑的希望是毒药。\n而敢于直面绝望的希望，才是文明的火种。",
+      "在最黑暗的时候，\n人类最不能失去的，\n就是理性、信念和希望。\n\n谢谢大家！"
     ];
     deck.forEach((item, idx) => {
       item.audienceText = audienceTexts[idx] || item.text;
@@ -980,13 +973,13 @@
     slidesRoot.innerHTML = deck.map((item, idx) => `
       <section class="slide ${idx === 0 ? "active cover" : ""}${[3,4,6].includes(idx) ? " tight-copy" : ""}">
         <div class="copy">
-          <span class="eyebrow">${item.pageLabel} 路 绗?${idx + 1} 椤?/span>
+          <span class="eyebrow">${item.pageLabel} · 第 ${idx + 1} 页</span>
           <h${idx === 0 ? "1" : "2"}>${item.title}</h${idx === 0 ? "1" : "2"}>
           ${
             idx === 0
               ? (() => {
                   const parts = item.text.split("\\n");
-                  return `<div class="cover-meta"><span class="school">${parts[0] || ""}</span><span class="author">${parts[1] || ""}</span><span class="date">${parts[2] || ""}</span></div><div class="cover-actions"><button class="start-btn" id="startReportBtn" type="button">寮€濮嬫眹鎶?/button><span class="start-tip">鐐瑰嚮鍚庤嚜鍔ㄦ挱鏀鹃煶涔愶紝鍙敤缈婚〉绗斻€侀紶鏍囧拰蹇嵎閿炕椤?/span></div>`;
+                  return `<div class="cover-meta"><span class="school">${parts[0] || ""}</span><span class="author">${parts[1] || ""}</span><span class="date">${parts[2] || ""}</span></div><div class="cover-actions"><button class="start-btn" id="startReportBtn" type="button">开始汇报</button><span class="start-tip">点击后自动播放音乐，可用翻页笔、鼠标和快捷键翻页</span></div>`;
                 })()
               : `<p class="lead">${isPresenter || isFullTextView ? item.text : (item.audienceText || item.text)}</p>`
           }
@@ -1005,15 +998,15 @@
       bgm.muted = true;
     }
     if (isFullTextView) {
-      fullTextBtn.textContent = "绮剧畝瑙嗗浘";
+      fullTextBtn.textContent = "精简视图";
     }
 
     function resolveVoices() {
       if (!window.speechSynthesis) return;
       const voices = window.speechSynthesis.getVoices();
       selectedVoice =
-        voices.find((voice) => /xiaoxiao|鏅撴檽/i.test(voice.name)) ||
-        voices.find((voice) => /zh[-_]?cn|chinese|涓枃/i.test(`${voice.lang} ${voice.name}`)) ||
+        voices.find((voice) => /xiaoxiao|晓晓/i.test(voice.name)) ||
+        voices.find((voice) => /zh[-_]?cn|chinese|中文/i.test(`${voice.lang} ${voice.name}`)) ||
         null;
     }
 
@@ -1028,13 +1021,13 @@
         .filter(Boolean)
         .join("\n");
       presenterCurrentTitle.textContent = current.title;
-      presenterCurrentMeta.textContent = 'Page ' + (currentIndex + 1) + ' 路 ' + current.pageLabel;
+      presenterCurrentMeta.textContent = 'Page ' + (currentIndex + 1) + ' · ' + current.pageLabel;
       const currentContent = document.createElement("div");
       currentContent.className = "teleprompter-content";
       currentContent.textContent = compactText(current.text);
       presenterCurrentNotes.replaceChildren(currentContent);
       presenterNextTitle.textContent = next ? next.title : 'End';
-      presenterNextMeta.textContent = next ? ('Page ' + Math.min(deck.length, currentIndex + 2) + ' 路 ' + next.pageLabel) : '';
+      presenterNextMeta.textContent = next ? ('Page ' + Math.min(deck.length, currentIndex + 2) + ' · ' + next.pageLabel) : '';
       presenterNextNotes.textContent = next ? compactText(next.text) : '';
       presenterStatus.textContent = 'Page ' + (currentIndex + 1) + ' / ' + deck.length;
       restartTeleprompter(current);
@@ -1137,7 +1130,7 @@
       slides.forEach((slide, i) => slide.classList.toggle("active", i === currentIndex));
       counter.textContent = `${String(currentIndex + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
       deckProgress.style.width = `${((currentIndex + 1) / deck.length) * 100}%`;
-      document.title = `銆婃祦娴湴鐞冦€嬭棰戞紨璁茬増 - ${currentIndex + 1}/${deck.length}`;
+      document.title = `《流浪地球》视频演讲版 - ${currentIndex + 1}/${deck.length}`;
     }
 
     function tryPlayBgm() {
@@ -1145,11 +1138,11 @@
       bgm.volume = Number(volumeRange.value) / 100;
       return bgm.play().then(() => {
         bgmPendingAutoplay = false;
-        musicBtn.textContent = "鏆傚仠闊充箰";
+        musicBtn.textContent = "暂停音乐";
         return true;
       }).catch(() => {
         bgmPendingAutoplay = true;
-        musicBtn.textContent = "鎾斁闊充箰";
+        musicBtn.textContent = "播放音乐";
         return false;
       });
     }
@@ -1160,7 +1153,7 @@
       loadingBar.style.width = `${ratio * 100}%`;
       loadingMeta.textContent = `${done} / ${total}`;
       if (currentLabel) {
-        loadingText.textContent = `姝ｅ湪鍔犺浇锛?{currentLabel}`;
+        loadingText.textContent = `正在加载：${currentLabel}`;
       }
     }
 
@@ -1173,32 +1166,32 @@
       });
     }
 
-    function preloadMediaBlob(src) {
+    function preloadAudio(src) {
       return new Promise((resolve) => {
-        if (!src) {
-          resolve();
-          return;
-        }
-        if (preloadedMediaUrls.has(src)) {
-          resolve();
-          return;
-        }
-        fetch(src, { cache: "force-cache" })
-          .then((response) => response.ok ? response.blob() : null)
-          .then((blob) => {
-            if (blob) preloadedMediaUrls.set(src, URL.createObjectURL(blob));
-            resolve();
-          })
-          .catch(() => resolve());
+        const audio = document.createElement("audio");
+        const done = () => resolve();
+        audio.preload = "auto";
+        audio.addEventListener("loadeddata", done, { once: true });
+        audio.addEventListener("canplaythrough", done, { once: true });
+        audio.addEventListener("error", done, { once: true });
+        audio.src = src;
+        audio.load();
       });
     }
 
-    function preloadAudio(src) {
-      return preloadMediaBlob(src);
-    }
-
     function preloadVideo(src) {
-      return preloadMediaBlob(src);
+      return new Promise((resolve) => {
+        const video = document.createElement("video");
+        const done = () => resolve();
+        video.preload = "auto";
+        video.muted = true;
+        video.playsInline = true;
+        video.addEventListener("loadeddata", done, { once: true });
+        video.addEventListener("canplay", done, { once: true });
+        video.addEventListener("error", done, { once: true });
+        video.src = src;
+        video.load();
+      });
     }
 
     async function preloadAsset(asset) {
@@ -1226,76 +1219,19 @@
     }
 
     async function preloadDeckAssets() {
-      if (isPresenter) {
-        assetsReady = true;
-        loadingScreen.classList.add("hidden");
-        return;
-      }
-      try {
-        if (isWarmOpen && localStorage.getItem(preloadReadyKey) === "1") {
-          assetsReady = true;
-          loadingText.textContent = "宸插鐢ㄥ綋鍓嶄細璇濈礌鏉?;
-          loadingMeta.textContent = "鏃犻渶閲嶆柊鍔犺浇";
-          setLoadingProgress(1, 1, "ready");
-          loadCurrentBackground();
-          loadingScreen.classList.add("hidden");
-          status.textContent = "绱犳潗宸插氨缁?;
-          return;
-        }
-      } catch {}
-      const assets = [];
-      const seen = new Set();
-      const addAsset = (type, src) => {
-        if (!src || seen.has(src)) return;
-        seen.add(src);
-        assets.push({ type, src });
-      };
-      deck.forEach((item) => {
-        addAsset("image", item.image);
-        addAsset("video", item.video);
-      });
-      addAsset("audio", "./assets/audio/bgm.mp3");
-      addAsset("audio", "./assets/audio/bgm.aac");
-
-      const total = assets.length;
-      const priorityCount = Math.min(deck.length, 4);
-      const priorityAssetKeys = new Set();
-      for (let i = 0; i < priorityCount; i += 1) {
-        const item = deck[i];
-        if (item.image) priorityAssetKeys.add(`image:${item.image}`);
-        if (item.video) priorityAssetKeys.add(`video:${item.video}`);
-      }
-      priorityAssetKeys.add("audio:./assets/audio/bgm.mp3");
-      const priorityAssets = assets.filter((asset) => priorityAssetKeys.has(`${asset.type}:${asset.src}`));
-      const remainingAssets = assets.filter((asset) => !priorityAssetKeys.has(`${asset.type}:${asset.src}`));
-      const isMobileLike = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 900;
-      const priorityConcurrency = isMobileLike ? 2 : 4;
-      const backgroundConcurrency = isMobileLike ? 1 : 3;
-      loadingText.textContent = "正在优先加载开场素材，请稍候…";
-      setLoadingProgress(0, total);
-      let done = await preloadAssetsConcurrent(priorityAssets, total, 0, priorityConcurrency);
+      // 直开版不做全量预加载，避免 file:// 场景长时间卡在加载页。
       assetsReady = true;
-      try { localStorage.setItem(preloadReadyKey, "1"); } catch {}
-      loadingText.textContent = "开场素材已就绪，其余素材正在后台加载…";
-      loadingMeta.textContent = `${done} / ${total}`;
+      loadingText.textContent = "本地直开模式已就绪";
+      loadingMeta.textContent = "直接双击 html 即可使用";
+      setLoadingProgress(1, 1, "ready");
       loadCurrentBackground();
       loadingScreen.classList.add("hidden");
-      status.textContent = "开场素材已就绪";
-      if (remainingAssets.length) {
-        preloadAssetsConcurrent(remainingAssets, total, done, backgroundConcurrency).then((finalDone) => {
-          loadingMeta.textContent = `${finalDone} / ${total}`;
-          status.textContent = "全部素材加载完成";
-        });
-      }
+      status.textContent = "待启动";
     }
 
     function retryPendingBgm() {
       if (!bgmPendingAutoplay || !bgm.paused || isPresenter) return;
       tryPlayBgm();
-    }
-
-    function resolveMediaSrc(src) {
-      return preloadedMediaUrls.get(src) || src;
     }
 
     function stopSpeech() {
@@ -1322,7 +1258,7 @@
       const now = performance.now();
       const totalElapsed = presentationStartedAt ? now - presentationStartedAt : 0;
       const pageElapsed = now - currentPageStartedAt;
-      timerDisplay.innerHTML = `<strong>璁℃椂</strong><span>鎬绘椂闀?${formatTime(totalElapsed)} 路 鏈〉 ${formatTime(pageElapsed)} / ${formatTime(currentPageTargetMs)}</span>`;
+      timerDisplay.innerHTML = `<strong>计时</strong><span>总时长 ${formatTime(totalElapsed)} · 本页 ${formatTime(pageElapsed)} / ${formatTime(currentPageTargetMs)}</span>`;
     }
 
     function ensureTimerReadout() {
@@ -1345,21 +1281,21 @@
       utterance.volume = 1;
       utterance.onstart = () => {
         if (token !== speechToken) return;
-        status.textContent = "鏈楄涓?;
+        status.textContent = "朗读中";
       };
       utterance.onerror = () => {
         if (token !== speechToken) return;
         activeUtterance = null;
-        status.textContent = "鏈楄澶辫触";
+        status.textContent = "朗读失败";
         if (autoPlaying) scheduleNext(pageDurationMs[currentIndex]);
       };
       utterance.onend = () => {
         if (token !== speechToken) return;
         activeUtterance = null;
-        status.textContent = "鏈楄瀹屾垚";
+        status.textContent = "朗读完成";
         if (!autoPlaying) return;
         if (currentIndex >= deck.length - 1) {
-          stopAutoPlay("鎾斁瀹屾垚", { stopMedia: true });
+          stopAutoPlay("播放完成", { stopMedia: true });
           return;
         }
         scheduleNext(1200);
@@ -1391,21 +1327,21 @@
 
     function playVideo() {
       if (!bgVideo.currentSrc && !bgVideo.getAttribute("src")) {
-        clipInfo.textContent = "褰撳墠椤垫病鏈夊彲鎾斁鐨勮棰?;
-        videoBtn.textContent = "鎾斁瑙嗛";
+        clipInfo.textContent = "当前页没有可播放的视频";
+        videoBtn.textContent = "播放视频";
         return Promise.resolve(false);
       }
-      if (bgVideo.readyState < 2) {
-        clipInfo.textContent = "瑙嗛杩樺湪鍔犺浇涓?;
-        videoBtn.textContent = "鎾斁瑙嗛";
+      if (bgVideo.readyState === 0) {
+        clipInfo.textContent = "视频还在加载中";
+        videoBtn.textContent = "播放视频";
         return Promise.resolve(false);
       }
       return bgVideo.play().then(() => {
-        videoBtn.textContent = "鏆傚仠瑙嗛";
+        videoBtn.textContent = "暂停视频";
         return true;
       }).catch((err) => {
-        clipInfo.textContent = `鎾斁澶辫触 - ${err && err.name ? err.name : "UnknownError"}`;
-        videoBtn.textContent = "鎾斁瑙嗛";
+        clipInfo.textContent = `播放失败 - ${err && err.name ? err.name : "UnknownError"}`;
+        videoBtn.textContent = "播放视频";
         return false;
       });
     }
@@ -1414,11 +1350,11 @@
       bgFallback.classList.remove("tone-cold", "tone-warm", "tone-hope", "portrait");
       veil.classList.add("image-mode");
       const label = `${item.pageLabel} ${item.title}`;
-      if (label.includes("鑷磋阿") || label.includes("鎰熻阿鍒樻厛娆?)) {
+      if (label.includes("致谢") || label.includes("感谢刘慈欣")) {
         bgFallback.classList.add("portrait");
-      } else if (label.includes("楂樻疆") || label.includes("澶槼") || label.includes("寮€鍦?) || label.includes("璁惧畾")) {
+      } else if (label.includes("高潮") || label.includes("太阳") || label.includes("开场") || label.includes("设定")) {
         bgFallback.classList.add("tone-warm");
-      } else if (label.includes("甯屾湜") || label.includes("楂樿吹") || label.includes("缁撳熬") || label.includes("鎰熷彈") || label.includes("閽荤煶")) {
+      } else if (label.includes("希望") || label.includes("高贵") || label.includes("结尾") || label.includes("感受") || label.includes("钻石")) {
         bgFallback.classList.add("tone-hope");
       } else {
         bgFallback.classList.add("tone-cold");
@@ -1439,24 +1375,17 @@
     function showImage(item) {
       stage.classList.toggle("video-mode", Boolean(item.video));
       applyMediaFraming(item);
-      if (item.image) {
-        bgFallback.src = item.image;
-        bgFallback.classList.remove("hidden");
-        bgFallback.classList.add("animated");
-        applyFallbackTone(item);
-      } else {
-        bgFallback.classList.add("hidden");
-        bgFallback.classList.remove("animated", "tone-cold", "tone-warm", "tone-hope", "portrait");
-        veil.classList.remove("image-mode");
-      }
+      bgFallback.src = item.image || supportedImages.cover;
+      bgFallback.classList.add("animated");
+      applyFallbackTone(item);
       bgVideo.pause();
       bgVideo.ontimeupdate = null;
       bgVideo.removeAttribute("src");
       bgVideo.load();
       bgVideo.classList.add("hidden");
       applyMaskBrightness();
-      clipInfo.textContent = "鍥剧墖鏄剧ず涓?;
-      videoBtn.textContent = "鎾斁瑙嗛";
+      clipInfo.textContent = "图片显示中";
+      videoBtn.textContent = "播放视频";
       videoBtn.disabled = true;
       videoBtn.style.opacity = "0.5";
     }
@@ -1472,15 +1401,14 @@
       const ctx = canvas.getContext("2d");
       ctx.drawImage(bgVideo, 0, 0, canvas.width, canvas.height);
       bgFallback.src = canvas.toDataURL("image/jpeg", 0.92);
-      bgFallback.classList.remove("hidden");
       bgFallback.classList.add("animated");
       applyFallbackTone(item);
       bgVideo.pause();
       bgVideo.classList.add("hidden");
       stage.classList.toggle("video-mode", Boolean(item.video));
       applyMaskBrightness();
-      clipInfo.textContent = "闈欏抚灞曠ず涓?;
-      videoBtn.textContent = "鎾斁瑙嗛";
+      clipInfo.textContent = "静帧展示中";
+      videoBtn.textContent = "播放视频";
       videoBtn.disabled = false;
       videoBtn.style.opacity = "1";
     }
@@ -1489,29 +1417,16 @@
       stage.classList.add("video-mode");
       applyMediaFraming(item);
       bgFallback.src = item.image || supportedImages.cover;
-      bgFallback.classList.remove("hidden");
       bgFallback.classList.remove("animated", "tone-cold", "tone-warm", "tone-hope", "portrait");
       veil.classList.remove("image-mode");
       bgVideo.classList.remove("hidden");
       applyMaskBrightness();
-      clipInfo.textContent = "瑙嗛鍔犺浇涓?;
+      clipInfo.textContent = "视频加载中";
       videoBtn.disabled = false;
       videoBtn.style.opacity = "1";
 
       bgVideo.onerror = () => {
         showImage(item);
-      };
-
-      let metadataReady = false;
-      let canPlayReady = false;
-      let started = false;
-      const tryStartCurrentVideo = () => {
-        if (started || !metadataReady || !canPlayReady) return;
-        started = true;
-        clipInfo.textContent = "鐟欏棝顣堕幘顓熸杹娑?";
-        playVideo().then((ok) => {
-          if (!ok) started = false;
-        });
       };
 
       bgVideo.onloadedmetadata = () => {
@@ -1537,25 +1452,14 @@
           segmentEnd = Math.min(duration, Math.max(6, (targetMs / 1000) * rate));
         }
         bgVideo.currentTime = segmentStart;
-        metadataReady = true;
         bgVideo.ontimeupdate = () => {
           if (bgVideo.currentTime >= segmentEnd - 0.08) freezeFrame();
         };
-        clipInfo.textContent = "瑙嗛鎾斁涓?;
-        tryStartCurrentVideo();
+        clipInfo.textContent = "视频播放中";
+        playVideo();
       };
 
-      bgVideo.onloadeddata = () => {
-        canPlayReady = true;
-        tryStartCurrentVideo();
-      };
-
-      bgVideo.oncanplay = () => {
-        canPlayReady = true;
-        tryStartCurrentVideo();
-      };
-
-      bgVideo.src = resolveMediaSrc(item.video);
+      bgVideo.src = item.video;
       bgVideo.load();
     }
 
@@ -1575,7 +1479,7 @@
       }
     }
 
-    function stopAutoPlay(text = "寰呭惎鍔?, options = {}) {
+    function stopAutoPlay(text = "待启动", options = {}) {
       const { stopMedia = false } = options;
       autoPlaying = false;
       speechEnabled = false;
@@ -1586,11 +1490,11 @@
       if (stopMedia) {
         bgVideo.pause();
         bgm.pause();
-        videoBtn.textContent = "鎾斁瑙嗛";
-        musicBtn.textContent = "鎾斁闊充箰";
+        videoBtn.textContent = "播放视频";
+        musicBtn.textContent = "播放音乐";
       }
-      autoBtn.textContent = "鑷姩鎾斁鏈楄";
-      autoPageBtn.textContent = "鑷姩缈婚〉";
+      autoBtn.textContent = "自动播放朗读";
+      autoPageBtn.textContent = "自动翻页";
       status.textContent = text;
       updateTimerReadout();
     }
@@ -1600,7 +1504,7 @@
       slideTimer = setTimeout(() => {
         if (!autoPlaying) return;
         if (currentIndex >= deck.length - 1) {
-          stopAutoPlay("鎾斁瀹屾垚", { stopMedia: true });
+          stopAutoPlay("播放完成", { stopMedia: true });
           return;
         }
         currentIndex += 1;
@@ -1617,8 +1521,8 @@
     function startAutoPlay() {
       autoPlaying = true;
       speechEnabled = true;
-      autoBtn.textContent = "鍋滄鑷姩鎾斁";
-      autoPageBtn.textContent = "鑷姩缈婚〉";
+      autoBtn.textContent = "停止自动播放";
+      autoPageBtn.textContent = "自动翻页";
       tryPlayBgm();
       loadCurrentBackground();
       startClipProgress(pageDurationMs[currentIndex]);
@@ -1631,8 +1535,8 @@
     function startAutoPageOnly() {
       autoPlaying = true;
       speechEnabled = false;
-      autoBtn.textContent = "鑷姩鎾斁鏈楄";
-      autoPageBtn.textContent = "鍋滄鑷姩缈婚〉";
+      autoBtn.textContent = "自动播放朗读";
+      autoPageBtn.textContent = "停止自动翻页";
       tryPlayBgm();
       stopSpeech();
       loadCurrentBackground();
@@ -1641,7 +1545,7 @@
     }
 
     function goTo(nextIndex) {
-      if (autoPlaying) stopAutoPlay("寰呭惎鍔?);
+      if (autoPlaying) stopAutoPlay("待启动");
       currentIndex = Math.max(0, Math.min(deck.length - 1, nextIndex));
       updateShell();
       loadCurrentBackground();
@@ -1651,12 +1555,12 @@
     }
 
     autoBtn.addEventListener("click", () => {
-      if (autoPlaying) stopAutoPlay("寰呭惎鍔?);
+      if (autoPlaying) stopAutoPlay("待启动");
       else startAutoPlay();
     });
 
     autoPageBtn.addEventListener("click", () => {
-      if (autoPlaying) stopAutoPlay("寰呭惎鍔?);
+      if (autoPlaying) stopAutoPlay("待启动");
       else startAutoPageOnly();
     });
 
@@ -1665,7 +1569,7 @@
       if (bgVideo.paused) playVideo();
       else {
         bgVideo.pause();
-        videoBtn.textContent = "鎾斁瑙嗛";
+        videoBtn.textContent = "播放视频";
       }
     });
 
@@ -1675,7 +1579,7 @@
       } else {
         bgm.pause();
         bgmPendingAutoplay = false;
-        musicBtn.textContent = "鎾斁闊充箰";
+        musicBtn.textContent = "播放音乐";
       }
     });
 
@@ -1698,11 +1602,9 @@
       }, 2200);
     }
 
-    function showControlsIfTopZone(event) {
-      if (!event) return;
-      if (event.clientY <= Math.max(120, window.innerHeight * 0.16)) {
-        showControls();
-      }
+    function hideControls() {
+      clearTimeout(controlsTimer);
+      document.body.classList.remove("controls-visible");
     }
 
     async function startReport() {
@@ -1714,17 +1616,16 @@
       if (!document.fullscreenElement) {
         try {
           await document.documentElement.requestFullscreen();
-          fullscreenBtn.textContent = "閫€鍑哄叏灞?;
+          fullscreenBtn.textContent = "退出全屏";
         } catch {}
       }
       if (!videoBtn.disabled) playVideo();
-      status.textContent = "姹囨姤寮€濮?;
+      status.textContent = "汇报开始";
     }
     presenterBtn.addEventListener('click', () => {
       broadcastPresenterState();
       const url = new URL(location.href);
       url.searchParams.set('presenter', '1');
-      url.searchParams.set('warm', '1');
       window.open(url.toString(), 'wandering-earth-presenter', 'width=1600,height=960');
     });
     fullTextBtn.addEventListener('click', () => {
@@ -1735,7 +1636,6 @@
         url.searchParams.set('fulltext', '1');
       }
       url.searchParams.delete('presenter');
-      url.searchParams.set('warm', '1');
       window.open(url.toString(), isFullTextView ? 'wandering-earth-audience-compact' : 'wandering-earth-audience-full', 'width=1600,height=960');
     });
 
@@ -1787,10 +1687,10 @@
     fullscreenBtn.addEventListener("click", async () => {
       if (!document.fullscreenElement) {
         await document.documentElement.requestFullscreen();
-        fullscreenBtn.textContent = "閫€鍑哄叏灞?;
+        fullscreenBtn.textContent = "退出全屏";
       } else {
         await document.exitFullscreen();
-        fullscreenBtn.textContent = "鍏ㄥ睆";
+        fullscreenBtn.textContent = "全屏";
       }
     });
 
@@ -1818,7 +1718,7 @@
       }
       if (event.key === "Escape" && autoPlaying) {
         event.preventDefault();
-        stopAutoPlay("寰呭惎鍔?);
+        stopAutoPlay("待启动");
       }
     }, { passive: false });
 
@@ -1885,9 +1785,25 @@
       window.addEventListener("beforeunload", stopSpeech);
     }
 
-    document.addEventListener("mousemove", showControlsIfTopZone, { passive: true });
-    document.addEventListener("touchstart", showControls, { passive: true });
-    document.addEventListener("touchmove", showControls, { passive: true });
+    document.addEventListener("mousemove", (event) => {
+      if (isPresenter) return;
+      if (event.clientY <= 96) {
+        showControls();
+      } else {
+        hideControls();
+      }
+    }, { passive: true });
+    ["touchstart", "touchmove"].forEach((type) => {
+      document.addEventListener(type, (event) => {
+        if (isPresenter) return;
+        const touch = event.touches && event.touches[0];
+        if (touch && touch.clientY <= 120) {
+          showControls();
+        } else {
+          hideControls();
+        }
+      }, { passive: true });
+    });
 
     updateShell();
     loadCurrentBackground();
@@ -1895,9 +1811,8 @@
     updatePresenterPanel();
     broadcastPresenterState();
     applyMaskBrightness();
-    showControls();
+    hideControls();
     preloadDeckAssets();
   </script>
 </body>
 </html>
-
