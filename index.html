@@ -960,6 +960,8 @@
     let presenterScrollTimer = null;
     let bgmPendingAutoplay = false;
     let assetsReady = false;
+    const mediaBlobCache = new Map();
+    const mediaBlobPromiseCache = new Map();
     const presenterStateKey = "wandering-earth-grade3-7min-presenter-state";
     const presenterCommandKey = "wandering-earth-grade3-7min-presenter-command";
     let lastPresenterStateTs = 0;
@@ -1166,32 +1168,36 @@
       });
     }
 
+    function fetchMediaBlobUrl(src, mimeHint = "") {
+      if (!src) return Promise.resolve("");
+      if (mediaBlobCache.has(src)) return Promise.resolve(mediaBlobCache.get(src));
+      if (mediaBlobPromiseCache.has(src)) return mediaBlobPromiseCache.get(src);
+      const promise = fetch(src, { cache: "force-cache" })
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.blob();
+        })
+        .then((blob) => {
+          const finalBlob = mimeHint && !blob.type ? new Blob([blob], { type: mimeHint }) : blob;
+          const url = URL.createObjectURL(finalBlob);
+          mediaBlobCache.set(src, url);
+          mediaBlobPromiseCache.delete(src);
+          return url;
+        })
+        .catch((error) => {
+          mediaBlobPromiseCache.delete(src);
+          throw error;
+        });
+      mediaBlobPromiseCache.set(src, promise);
+      return promise;
+    }
+
     function preloadAudio(src) {
-      return new Promise((resolve) => {
-        const audio = document.createElement("audio");
-        const done = () => resolve();
-        audio.preload = "auto";
-        audio.addEventListener("loadeddata", done, { once: true });
-        audio.addEventListener("canplaythrough", done, { once: true });
-        audio.addEventListener("error", done, { once: true });
-        audio.src = src;
-        audio.load();
-      });
+      return fetchMediaBlobUrl(src, "audio/mpeg").then(() => {}).catch(() => {});
     }
 
     function preloadVideo(src) {
-      return new Promise((resolve) => {
-        const video = document.createElement("video");
-        const done = () => resolve();
-        video.preload = "auto";
-        video.muted = true;
-        video.playsInline = true;
-        video.addEventListener("loadeddata", done, { once: true });
-        video.addEventListener("canplay", done, { once: true });
-        video.addEventListener("error", done, { once: true });
-        video.src = src;
-        video.load();
-      });
+      return fetchMediaBlobUrl(src, "video/mp4").then(() => {}).catch(() => {});
     }
 
     async function preloadAsset(asset) {
@@ -1219,14 +1225,49 @@
     }
 
     async function preloadDeckAssets() {
-      // 直开版不做全量预加载，避免 file:// 场景长时间卡在加载页。
+      const currentItem = deck[currentIndex];
+      const nextItem = deck[Math.min(deck.length - 1, currentIndex + 1)];
+      const essentialAssets = [];
+      const seen = new Set();
+      const pushAsset = (type, src) => {
+        if (!src || seen.has(src)) return;
+        seen.add(src);
+        essentialAssets.push({ type, src });
+      };
+      [currentItem, nextItem].forEach((item) => {
+        if (!item) return;
+        pushAsset("image", item.image);
+        pushAsset("video", item.video);
+      });
+      pushAsset("audio", "./assets/audio/bgm.mp3");
+      pushAsset("audio", "./assets/audio/bgm.aac");
+
+      loadingText.textContent = "正在优先加载开场素材，请稍候…";
+      setLoadingProgress(0, essentialAssets.length);
+      await preloadAssetsConcurrent(essentialAssets, essentialAssets.length, 0, 2);
+
       assetsReady = true;
-      loadingText.textContent = "本地直开模式已就绪";
-      loadingMeta.textContent = "直接双击 html 即可使用";
-      setLoadingProgress(1, 1, "ready");
+      loadingText.textContent = "素材已就绪";
+      loadingMeta.textContent = "当前页与下一页已可播放";
+      setLoadingProgress(essentialAssets.length, essentialAssets.length, "ready");
       loadCurrentBackground();
       loadingScreen.classList.add("hidden");
       status.textContent = "待启动";
+
+      const remainingAssets = [];
+      deck.forEach((item) => {
+        if (item.image && !seen.has(item.image)) {
+          seen.add(item.image);
+          remainingAssets.push({ type: "image", src: item.image });
+        }
+        if (item.video && !seen.has(item.video)) {
+          seen.add(item.video);
+          remainingAssets.push({ type: "video", src: item.video });
+        }
+      });
+      if (remainingAssets.length) {
+        preloadAssetsConcurrent(remainingAssets, remainingAssets.length, 0, 2).catch(() => {});
+      }
     }
 
     function retryPendingBgm() {
@@ -1432,11 +1473,21 @@
       bgVideo.onloadedmetadata = () => {
         const rate = item.playbackRate || 0.9;
         let frozen = false;
+        let seekFallbackTimer = null;
         const freezeFrame = () => {
           if (frozen) return;
           frozen = true;
           bgVideo.ontimeupdate = null;
           freezeVideoToAnimatedStill(item);
+        };
+        const startPlayback = () => {
+          clearTimeout(seekFallbackTimer);
+          bgVideo.playbackRate = rate;
+          bgVideo.ontimeupdate = () => {
+            if (bgVideo.currentTime >= segmentEnd - 0.08) freezeFrame();
+          };
+          clipInfo.textContent = "视频播放中";
+          playVideo();
         };
         bgVideo.playbackRate = rate;
         const duration = bgVideo.duration;
@@ -1451,15 +1502,25 @@
           segmentStart = 0;
           segmentEnd = Math.min(duration, Math.max(6, (targetMs / 1000) * rate));
         }
-        bgVideo.currentTime = segmentStart;
-        bgVideo.ontimeupdate = () => {
-          if (bgVideo.currentTime >= segmentEnd - 0.08) freezeFrame();
+        const onSeeked = () => {
+          bgVideo.removeEventListener("seeked", onSeeked);
+          startPlayback();
         };
-        clipInfo.textContent = "视频播放中";
-        playVideo();
+        bgVideo.addEventListener("seeked", onSeeked, { once: true });
+        seekFallbackTimer = setTimeout(() => {
+          bgVideo.removeEventListener("seeked", onSeeked);
+          startPlayback();
+        }, 1200);
+        try {
+          bgVideo.currentTime = segmentStart;
+        } catch {
+          bgVideo.removeEventListener("seeked", onSeeked);
+          clearTimeout(seekFallbackTimer);
+          startPlayback();
+        }
       };
 
-      bgVideo.src = item.video;
+      bgVideo.src = mediaBlobCache.get(item.video) || item.video;
       bgVideo.load();
     }
 
