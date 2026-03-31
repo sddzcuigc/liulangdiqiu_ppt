@@ -741,6 +741,7 @@
     const isWarmOpen = viewParams.get("warm") === "1";
     document.body.classList.toggle("presenter-mode", isPresenter);
     const preloadReadyKey = "wandering-earth-grade3-7min-new-preload-ready";
+    const preloadedMediaUrls = new Map();
     const supportedVideos = {
       coverIntro: "./assets/video/liulang2-home-2304-2315-slow.mp4",
       engine: "./assets/video/planet-engine-correct-front-55s-stable.mp4",
@@ -1172,32 +1173,32 @@
       });
     }
 
-    function preloadAudio(src) {
+    function preloadMediaBlob(src) {
       return new Promise((resolve) => {
-        const audio = document.createElement("audio");
-        const done = () => resolve();
-        audio.preload = "auto";
-        audio.addEventListener("loadeddata", done, { once: true });
-        audio.addEventListener("canplaythrough", done, { once: true });
-        audio.addEventListener("error", done, { once: true });
-        audio.src = src;
-        audio.load();
+        if (!src) {
+          resolve();
+          return;
+        }
+        if (preloadedMediaUrls.has(src)) {
+          resolve();
+          return;
+        }
+        fetch(src, { cache: "force-cache" })
+          .then((response) => response.ok ? response.blob() : null)
+          .then((blob) => {
+            if (blob) preloadedMediaUrls.set(src, URL.createObjectURL(blob));
+            resolve();
+          })
+          .catch(() => resolve());
       });
     }
 
+    function preloadAudio(src) {
+      return preloadMediaBlob(src);
+    }
+
     function preloadVideo(src) {
-      return new Promise((resolve) => {
-        const video = document.createElement("video");
-        const done = () => resolve();
-        video.preload = "auto";
-        video.muted = true;
-        video.playsInline = true;
-        video.addEventListener("loadeddata", done, { once: true });
-        video.addEventListener("canplay", done, { once: true });
-        video.addEventListener("error", done, { once: true });
-        video.src = src;
-        video.load();
-      });
+      return preloadMediaBlob(src);
     }
 
     async function preloadAsset(asset) {
@@ -1272,6 +1273,10 @@
     function retryPendingBgm() {
       if (!bgmPendingAutoplay || !bgm.paused || isPresenter) return;
       tryPlayBgm();
+    }
+
+    function resolveMediaSrc(src) {
+      return preloadedMediaUrls.get(src) || src;
     }
 
     function stopSpeech() {
@@ -1371,7 +1376,7 @@
         videoBtn.textContent = "播放视频";
         return Promise.resolve(false);
       }
-      if (bgVideo.readyState === 0) {
+      if (bgVideo.readyState < 2) {
         clipInfo.textContent = "视频还在加载中";
         videoBtn.textContent = "播放视频";
         return Promise.resolve(false);
@@ -1478,6 +1483,18 @@
         showImage(item);
       };
 
+      let metadataReady = false;
+      let canPlayReady = false;
+      let started = false;
+      const tryStartCurrentVideo = () => {
+        if (started || !metadataReady || !canPlayReady) return;
+        started = true;
+        clipInfo.textContent = "瑙嗛鎾斁涓?";
+        playVideo().then((ok) => {
+          if (!ok) started = false;
+        });
+      };
+
       bgVideo.onloadedmetadata = () => {
         const rate = item.playbackRate || 0.9;
         let frozen = false;
@@ -1501,14 +1518,25 @@
           segmentEnd = Math.min(duration, Math.max(6, (targetMs / 1000) * rate));
         }
         bgVideo.currentTime = segmentStart;
+        metadataReady = true;
         bgVideo.ontimeupdate = () => {
           if (bgVideo.currentTime >= segmentEnd - 0.08) freezeFrame();
         };
         clipInfo.textContent = "视频播放中";
-        playVideo();
+        tryStartCurrentVideo();
       };
 
-      bgVideo.src = item.video;
+      bgVideo.onloadeddata = () => {
+        canPlayReady = true;
+        tryStartCurrentVideo();
+      };
+
+      bgVideo.oncanplay = () => {
+        canPlayReady = true;
+        tryStartCurrentVideo();
+      };
+
+      bgVideo.src = resolveMediaSrc(item.video);
       bgVideo.load();
     }
 
@@ -1651,6 +1679,13 @@
       }, 2200);
     }
 
+    function showControlsIfTopZone(event) {
+      if (!event) return;
+      if (event.clientY <= Math.max(120, window.innerHeight * 0.16)) {
+        showControls();
+      }
+    }
+
     async function startReport() {
       if (!assetsReady) return;
       reportStarted = true;
@@ -1664,7 +1699,6 @@
         } catch {}
       }
       if (!videoBtn.disabled) playVideo();
-      showControls();
       status.textContent = "汇报开始";
     }
     presenterBtn.addEventListener('click', () => {
@@ -1742,7 +1776,6 @@
     });
 
     document.addEventListener("keydown", (event) => {
-      showControls();
       retryPendingBgm();
       if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " " || event.key === "Enter" || event.key === "NumpadEnter" || event.key.toLowerCase() === "n") {
         event.preventDefault();
@@ -1771,7 +1804,6 @@
     }, { passive: false });
 
     document.addEventListener("wheel", (event) => {
-      showControls();
       if (wheelLocked) return;
       if (Math.abs(event.deltaY) < 18) return;
       wheelLocked = true;
@@ -1805,7 +1837,6 @@
     });
 
     document.addEventListener("click", (event) => {
-      showControls();
       retryPendingBgm();
       if (isPresenter) return;
       const target = event.target;
@@ -1835,9 +1866,9 @@
       window.addEventListener("beforeunload", stopSpeech);
     }
 
-    ["mousemove", "touchstart", "touchmove"].forEach((type) => {
-      document.addEventListener(type, showControls, { passive: true });
-    });
+    document.addEventListener("mousemove", showControlsIfTopZone, { passive: true });
+    document.addEventListener("touchstart", showControls, { passive: true });
+    document.addEventListener("touchmove", showControls, { passive: true });
 
     updateShell();
     loadCurrentBackground();
